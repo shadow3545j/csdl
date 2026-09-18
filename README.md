@@ -13,11 +13,11 @@ Nền tảng điều phối khám chữa bệnh đa kênh (**Omnichannel Healthc
 ---
 
 ## 👥 2. Thành viên nhóm (Team: Chú Ba)
-| Họ và tên | Mã sinh viên |
+| Họ và tên | Mã sinh viên | Vai trò / Nhiệm vụ |
 | :--- | :--- | :--- |
-| **Nguyễn Xuân Bảo**  | `n24dccn097` |
+| **Nguyễn Xuân Bảo** *(Trưởng nhóm)* | `n24dccn097` |
 | **Phạm Anh Hào** | `n24dccn117` |
-| **Trần Xa Thiên Tân** | `n24dccn162` |
+| **Trần Xa Thiên Tân** | `n24dccn162` |  
 
 ---
 
