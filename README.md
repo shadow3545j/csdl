@@ -15,9 +15,9 @@ Nền tảng điều phối khám chữa bệnh đa kênh (**Omnichannel Healthc
 ## 👥 2. Thành viên nhóm (Team: Chú Ba)
 | Họ và tên | Mã sinh viên | Vai trò / Nhiệm vụ |
 | :--- | :--- | :--- |
-| **Nguyễn Xuân Bảo** *(Trưởng nhóm)* | `n24dccn097` | Thiết kế CSDL, Ràng buộc toàn vẹn, Triggers & Transactions |
-| **Phạm Anh Hào** | `n24dccn117` | Mô hình hóa ERD, Phân tích nghiệp vụ, Viết báo cáo |
-| **Trần Xa Thiên Tân** | `n24dccn162` | Thiết kế truy vấn tối ưu, Indexing, Kiểm thử hệ thống |
+| **Nguyễn Xuân Bảo**  | `n24dccn097` |
+| **Phạm Anh Hào** | `n24dccn117` |
+| **Trần Xa Thiên Tân** | `n24dccn162` |
 
 ---
 
