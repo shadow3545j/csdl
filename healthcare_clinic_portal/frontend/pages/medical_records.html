@@ -1,0 +1,694 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quản lý hồ sơ bệnh án</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../css/medical_records.css">
+</head>
+
+<body>
+
+    <div class="app-layout">
+
+        <div id="sidebar-container"></div>
+
+        <main class="main-content">
+
+            <div id="navbar-container"></div>
+
+            <section class="page-content" id="medical-records-page">
+
+                <div class="page-heading">
+                    <div>
+                        <h1>Quản lý hồ sơ bệnh án</h1>
+                        <p>Quản lý thông tin khám chữa bệnh của bệnh nhân</p>
+                    </div>
+
+                    
+<button
+    type="button"
+    class="btn btn-primary"
+    id="btn-add-medical-record"
+    data-permission="medical_records.create">
+    + Tạo hồ sơ bệnh án
+</button>
+
+                </div>
+
+                <!-- STATISTICS -->
+                <div class="medical-record-stats">
+
+                    <div class="record-stat-card">
+                        <div class="record-stat-icon">📁</div>
+                        <div>
+                            <span>Tổng hồ sơ</span>
+                            <h3 id="total-records">0</h3>
+                        </div>
+                    </div>
+
+                    <div class="record-stat-card">
+                        <div class="record-stat-icon">📝</div>
+                        <div>
+                            <span>Bản nháp</span>
+                            <h3 id="draft-records">0</h3>
+                        </div>
+                    </div>
+
+                    <div class="record-stat-card">
+                        <div class="record-stat-icon">✓</div>
+                        <div>
+                            <span>Đã hoàn tất</span>
+                            <h3 id="finalized-records">0</h3>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div id="message"></div>
+
+                <!-- FILTER -->
+                <div class="card medical-record-toolbar">
+
+                    <div class="record-search">
+                        <input
+                            type="text"
+                            id="search-medical-record"
+                            class="form-control"
+                            placeholder="Tìm mã hồ sơ, bệnh nhân, chẩn đoán...">
+                    </div>
+
+                    <div class="record-filter">
+                        <select
+                            id="filter-record-status"
+                            class="form-control">
+
+                            <option value="">Tất cả trạng thái</option>
+                            <option value="Draft">Bản nháp</option>
+                            <option value="Finalized">Đã hoàn tất</option>
+
+                        </select>
+                    </div>
+
+                    <div class="record-filter">
+                        <select
+                            id="filter-record-patient"
+                            class="form-control">
+
+                            <option value="">Tất cả bệnh nhân</option>
+
+                        </select>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        id="refresh-medical-records">
+                        ↻ Làm mới
+                    </button>
+
+                </div>
+
+                <!-- MEDICAL RECORD TABLE -->
+                <div class="card medical-record-table-card">
+
+                    <div class="card-header">
+                        <h3>Danh sách hồ sơ bệnh án</h3>
+
+                        <span id="medical-record-result-count">
+                            0 hồ sơ
+                        </span>
+                    </div>
+
+                    <div class="table-wrapper">
+
+                        <table class="medical-record-table">
+
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã hồ sơ</th>
+                                    <th>Bệnh nhân</th>
+                                    <th>Mã lịch hẹn</th>
+                                    <th>Mã bệnh</th>
+                                    <th>Chẩn đoán</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="medical-records-table">
+
+                                <tr>
+                                    <td colspan="8" style="text-align:center;">
+                                        Đang tải dữ liệu...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <div id="footer-container"></div>
+
+        </main>
+
+    </div>
+
+
+    <!-- ======================================
+         CREATE / EDIT MEDICAL RECORD MODAL
+    ======================================= -->
+
+    <div class="modal" id="medical-record-form-modal">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h3 id="medical-record-form-title">
+                    Tạo hồ sơ bệnh án
+                </h3>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="close-medical-record-form">
+                    &times;
+                </button>
+
+            </div>
+
+            <form id="medical-record-form">
+
+                <div class="modal-body">
+
+                    <div id="medical-record-form-message"></div>
+
+                    <div class="form-group">
+
+                        <label for="ma_ho_so">Mã hồ sơ *</label>
+
+                        <input
+                            type="text"
+                            id="ma_ho_so"
+                            class="form-control"
+                            maxlength="20"
+                            placeholder="Ví dụ: HS006"
+                            required>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="ma_benh_nhan">Bệnh nhân *</label>
+
+                        <select
+                            id="ma_benh_nhan"
+                            class="form-control"
+                            required>
+
+                            <option value="">
+                                -- Chọn bệnh nhân --
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="ma_lich_hen">Lịch hẹn khám *</label>
+
+                        <select
+                            id="ma_lich_hen"
+                            class="form-control"
+                            required>
+
+                            <option value="">
+                                -- Chọn lịch hẹn --
+                            </option>
+
+                        </select>
+
+                        <small>
+                            Chỉ hiển thị lịch hẹn đang trong quá trình khám.
+                        </small>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="ma_benh">Mã bệnh</label>
+
+                        <input
+                            type="text"
+                            id="ma_benh"
+                            class="form-control"
+                            maxlength="20"
+                            placeholder="Ví dụ: J00">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="trieu_chung">Triệu chứng</label>
+
+                        <textarea
+                            id="trieu_chung"
+                            class="form-control"
+                            rows="3"
+                            placeholder="Nhập triệu chứng của bệnh nhân..."></textarea>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="chan_doan">Chẩn đoán</label>
+
+                        <textarea
+                            id="chan_doan"
+                            class="form-control"
+                            rows="3"
+                            placeholder="Nhập kết quả chẩn đoán..."></textarea>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="trang_thai">Trạng thái hồ sơ</label>
+
+                        <select
+                            id="trang_thai"
+                            class="form-control">
+
+                            <option value="Draft">Bản nháp</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        id="cancel-medical-record-form">
+                        Hủy
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        id="save-medical-record">
+                        Lưu hồ sơ
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================
+         MEDICAL RECORD DETAIL MODAL
+    ======================================= -->
+
+    <div class="modal" id="medical-record-detail-modal">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h3>Chi tiết hồ sơ bệnh án</h3>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="close-medical-record-detail">
+                    &times;
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div id="medical-record-detail"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================
+         MEDICAL RECORD ATTACHMENTS MODAL
+    ======================================= -->
+
+    <div class="modal" id="medical-record-attachments-modal">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <div>
+                    <h3>Phụ lục đính chính bệnh án</h3>
+                    <small id="attachment-record-label"></small>
+                </div>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="close-medical-record-attachments">
+                    &times;
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div id="medical-record-attachments-message"></div>
+
+                <input
+                    type="hidden"
+                    id="attachment-parent-record-id">
+
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px;">
+
+                    <div>
+                        <h4>Danh sách phụ lục</h4>
+                        <small>Các nội dung đính chính thuộc hồ sơ bệnh án này.</small>
+                    </div>
+
+                    
+<button
+    type="button"
+    class="btn btn-primary"
+    id="btn-add-medical-record-attachment"
+    data-permission="medical_records.create_attachment">
+    + Thêm phụ lục
+</button>
+
+
+                </div>
+
+                <div class="table-wrapper">
+
+                    <table class="medical-record-table">
+
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Mã phụ lục</th>
+                                <th>Lý do đính chính</th>
+                                <th>Nội dung</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="medical-record-attachments-table">
+
+                            <tr>
+                                <td colspan="5" style="text-align:center;">
+                                    Chưa tải dữ liệu phụ lục.
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    id="close-medical-record-attachments-footer">
+                    Đóng
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================
+         CREATE / EDIT ATTACHMENT MODAL
+    ======================================= -->
+
+    <div class="modal" id="medical-record-attachment-form-modal">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h3 id="medical-record-attachment-form-title">
+                    Thêm phụ lục đính chính
+                </h3>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="close-medical-record-attachment-form">
+                    &times;
+                </button>
+
+            </div>
+
+            <form id="medical-record-attachment-form">
+
+                <div class="modal-body">
+
+                    <div id="medical-record-attachment-form-message"></div>
+
+                    <input
+                        type="hidden"
+                        id="attachment-form-record-id">
+
+                    <div class="form-group">
+
+                        <label for="ma_phu_luc">Mã phụ lục *</label>
+
+                        <input
+                            type="text"
+                            id="ma_phu_luc"
+                            class="form-control"
+                            maxlength="20"
+                            placeholder="Ví dụ: PL002"
+                            required>
+
+                        <small>
+                            Mã phụ lục phải duy nhất và không được để trống.
+                        </small>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="ly_do_dinh_chinh">Lý do đính chính *</label>
+
+                        <textarea
+                            id="ly_do_dinh_chinh"
+                            class="form-control"
+                            rows="3"
+                            placeholder="Nhập lý do cần đính chính..."
+                            required></textarea>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="noi_dung">Nội dung đính chính *</label>
+
+                        <textarea
+                            id="noi_dung"
+                            class="form-control"
+                            rows="5"
+                            placeholder="Nhập nội dung bổ sung hoặc đính chính..."
+                            required></textarea>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        id="cancel-medical-record-attachment-form">
+                        Hủy
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        id="save-medical-record-attachment">
+                        Lưu phụ lục
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================
+         DELETE ATTACHMENT CONFIRMATION MODAL
+    ======================================= -->
+
+    <div class="modal" id="delete-medical-record-attachment-modal">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h3>Xác nhận xóa phụ lục</h3>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="close-delete-medical-record-attachment">
+                    &times;
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <input
+                    type="hidden"
+                    id="delete-medical-record-attachment-id">
+
+                <p>
+                    Bạn có chắc chắn muốn xóa phụ lục
+                    <strong id="delete-medical-record-attachment-name"></strong>?
+                </p>
+
+                <p>
+                    Thao tác này sẽ xóa phụ lục khỏi hồ sơ bệnh án.
+                </p>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    id="cancel-delete-medical-record-attachment">
+                    Hủy
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    id="confirm-delete-medical-record-attachment">
+                    Xóa phụ lục
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================
+         DELETE MEDICAL RECORD MODAL
+    ======================================= -->
+
+    <div class="modal" id="delete-medical-record-modal">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h3>Xác nhận xóa hồ sơ</h3>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="close-delete-medical-record">
+                    &times;
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <input
+                    type="hidden"
+                    id="delete-medical-record-id">
+
+                <p>
+                    Bạn có chắc chắn muốn xóa hồ sơ bệnh án
+                    <strong id="delete-medical-record-name"></strong>?
+                </p>
+
+                <p>
+                    Thao tác này có thể bị từ chối nếu hồ sơ
+                    đang được dữ liệu khác tham chiếu.
+                </p>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    id="cancel-delete-medical-record">
+                    Hủy
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    id="confirm-delete-medical-record">
+                    Xóa hồ sơ
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+    <script src="../js/api.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/medical_records.js"></script>
+
+</body>
+
+</html>

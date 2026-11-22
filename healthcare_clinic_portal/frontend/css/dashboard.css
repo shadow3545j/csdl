@@ -1,0 +1,336 @@
+
+/* ========================================
+   DASHBOARD HEADER
+======================================== */
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.dashboard-header h2 {
+    font-size: 22px;
+    color: #1e293b;
+}
+
+.dashboard-header p {
+    color: #64748b;
+    margin-top: 5px;
+}
+
+.dashboard-date {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 10px 15px;
+    border-radius: 8px;
+    color: #64748b;
+    white-space: nowrap;
+}
+
+
+/* ========================================
+   STATISTIC CARDS
+======================================== */
+
+.stats-grid {
+    display: grid;
+
+    /* Tự chia cột theo số thẻ thực tế */
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(min(100%, 250px), 1fr)
+    );
+
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    width: 100%;
+    min-width: 0;
+    background: #ffffff;
+    padding: 22px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+}
+
+.stat-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.stat-title {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.stat-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-size: 21px;
+    flex-shrink: 0;
+}
+
+.stat-icon.blue {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.stat-icon.green {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.stat-icon.orange {
+    background: #ffedd5;
+    color: #ea580c;
+}
+
+.stat-icon.purple {
+    background: #ede9fe;
+    color: #7c3aed;
+}
+
+.stat-value {
+    font-size: 29px;
+    font-weight: 700;
+    margin-top: 15px;
+    color: #1e293b;
+}
+
+.stat-description {
+    color: #94a3b8;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+
+/* ========================================
+   DASHBOARD CONTENT
+======================================== */
+
+.dashboard-grid {
+    display: grid;
+
+    /* Một khung sẽ tự chiếm toàn bộ hàng */
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(min(100%, 420px), 1fr)
+    );
+
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.dashboard-panel {
+    width: 100%;
+    min-width: 0;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 22px;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.panel-header h3 {
+    font-size: 16px;
+    color: #1e293b;
+}
+
+.panel-header a {
+    color: #2563eb;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+
+/* ========================================
+   CHART
+======================================== */
+
+.chart-container {
+    width: 100%;
+    min-height: 260px;
+    position: relative;
+}
+
+
+/* ========================================
+   TABLE
+======================================== */
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    white-space: nowrap;
+}
+
+.data-table th {
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: left;
+    padding: 13px 15px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.data-table td {
+    padding: 14px 15px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+    font-size: 13px;
+}
+
+.data-table tr:hover td {
+    background: #f8fafc;
+}
+
+
+/* ========================================
+   QUICK ACTIONS
+======================================== */
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(min(100%, 220px), 1fr)
+    );
+    gap: 15px;
+}
+
+.quick-action {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 17px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    transition: .2s;
+    min-width: 0;
+}
+
+.quick-action:hover {
+    border-color: #2563eb;
+    transform: translateY(-2px);
+}
+
+.quick-action-icon {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    background: #dbeafe;
+    color: #2563eb;
+    font-size: 19px;
+    flex-shrink: 0;
+}
+
+.quick-action strong {
+    font-size: 13px;
+}
+
+.quick-action span {
+    display: block;
+    color: #64748b;
+    font-size: 11px;
+    margin-top: 3px;
+}
+
+
+/* ========================================
+   EMPTY STATE
+======================================== */
+
+.empty-state {
+    text-align: center;
+    padding: 35px 15px;
+    color: #94a3b8;
+}
+
+.empty-state p {
+    margin-top: 8px;
+}
+
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 900px) {
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .dashboard-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .dashboard-header h2 {
+        font-size: 20px;
+    }
+
+    .dashboard-date {
+        font-size: 12px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .stat-card {
+        padding: 17px;
+    }
+
+    .dashboard-panel {
+        padding: 15px;
+    }
+
+    .panel-header {
+        align-items: flex-start;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 11px 10px;
+    }
+
+}

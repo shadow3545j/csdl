@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Healthcare Clinic</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <div id="sidebar-container"></div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+
+        <!-- NAVBAR -->
+        <div id="navbar-container"></div>
+
+        <main class="page-content">
+
+            <!-- DASHBOARD HEADER -->
+            <section class="dashboard-header">
+                <div>
+                    <h2>Tổng quan hệ thống</h2>
+                    <p>Chào mừng đến với hệ thống quản lý phòng khám Healthcare.</p>
+                </div>
+
+                <div class="dashboard-date" id="dashboard-date">
+                    Đang tải ngày...
+                </div>
+            </section>
+
+            <!-- STATISTICS -->
+            <section class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-title">Tổng bệnh nhân</span>
+                        <div class="stat-icon blue">♙</div>
+                    </div>
+                    <div class="stat-value" id="total-patients">—</div>
+                    <div class="stat-description">Dữ liệu bệnh nhân</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-title">Tổng bác sĩ</span>
+                        <div class="stat-icon green">⚕</div>
+                    </div>
+                    <div class="stat-value" id="total-doctors">—</div>
+                    <div class="stat-description">Đội ngũ bác sĩ</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-title">Tổng lịch hẹn</span>
+                        <div class="stat-icon orange">▣</div>
+                    </div>
+                    <div class="stat-value" id="total-appointments">—</div>
+                    <div class="stat-description">Tất cả lịch hẹn khám</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span class="stat-title">Tổng đơn thuốc</span>
+                        <div class="stat-icon purple">✚</div>
+                    </div>
+                    <div class="stat-value" id="total-prescriptions">—</div>
+                    <div class="stat-description">Tất cả đơn thuốc</div>
+                </div>
+
+            </section>
+
+            <!-- APPOINTMENT STATUS -->
+            <section class="dashboard-grid">
+
+                <div class="dashboard-panel">
+                    <div class="panel-header">
+                        <h3>Tình trạng lịch hẹn</h3>
+                        <a href="appointments.html">Xem tất cả</a>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã lịch hẹn</th>
+                                    <th>Bệnh nhân</th>
+                                    <th>Bác sĩ</th>
+                                    <th>Thời gian</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="recent-appointments">
+                                <tr>
+                                    <td colspan="5" class="empty-state">
+                                        Đang tải dữ liệu...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- PRESCRIPTION SUMMARY -->
+                <div class="dashboard-panel">
+                    <div class="panel-header">
+                        <h3>Tình trạng đơn thuốc</h3>
+                        <a href="prescriptions.html">Xem tất cả</a>
+                    </div>
+
+                    <div id="prescription-summary">
+                        <div class="empty-state">
+                            <p>Đang tải dữ liệu...</p>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- QUICK ACTIONS -->
+            <section class="dashboard-panel">
+                <div class="panel-header">
+                    <h3>Truy cập nhanh</h3>
+                </div>
+
+                <div class="quick-actions">
+
+                    <a href="patients.html" class="quick-action">
+                        <div class="quick-action-icon">♙</div>
+                        <div>
+                            <strong>Quản lý bệnh nhân</strong>
+                            <span>Xem và quản lý hồ sơ bệnh nhân</span>
+                        </div>
+                    </a>
+
+                    <a href="doctors.html" class="quick-action">
+                        <div class="quick-action-icon">⚕</div>
+                        <div>
+                            <strong>Quản lý bác sĩ</strong>
+                            <span>Danh sách bác sĩ và chuyên khoa</span>
+                        </div>
+                    </a>
+
+                    <a href="appointments.html" class="quick-action">
+                        <div class="quick-action-icon">▣</div>
+                        <div>
+                            <strong>Quản lý lịch hẹn</strong>
+                            <span>Theo dõi lịch khám bệnh</span>
+                        </div>
+                    </a>
+
+                </div>
+            </section>
+
+        </main>
+
+        <!-- FOOTER -->
+        <div id="footer-container"></div>
+
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/dashboard.js"></script>
+
+</body>
+</html>

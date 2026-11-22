@@ -1,0 +1,377 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quản lý danh mục thuốc</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../css/medicines.css">
+</head>
+
+<body>
+
+    <div class="app-layout">
+
+        <!-- SIDEBAR -->
+        <div id="sidebar-container"></div>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- NAVBAR -->
+            <div id="navbar-container"></div>
+
+            <section class="page-content" id="medicines-page">
+
+                <!-- TIÊU ĐỀ -->
+                <div class="page-heading">
+                    <div>
+                        <h1>Quản lý danh mục thuốc</h1>
+                        <p>Quản lý thông tin thuốc và số lượng tồn kho.</p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        id="btn-add-medicine"
+                        data-role-allow="Admin,Pharmacist">
+                        + Thêm thuốc
+                    </button>
+                </div>
+
+                <!-- THỐNG KÊ -->
+                <div class="medicine-statistics">
+
+                    <div class="card medicine-stat-card">
+                        <div class="medicine-stat-icon">💊</div>
+                        <div>
+                            <p>Tổng số thuốc</p>
+                            <h2 id="total-medicines">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="card medicine-stat-card">
+                        <div class="medicine-stat-icon">📦</div>
+                        <div>
+                            <p>Còn hàng</p>
+                            <h2 id="available-medicines">0</h2>
+                        </div>
+                    </div>
+
+                    <div class="card medicine-stat-card">
+                        <div class="medicine-stat-icon">⚠️</div>
+                        <div>
+                            <p>Hết hàng</p>
+                            <h2 id="out-of-stock-medicines">0</h2>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- THÔNG BÁO -->
+                <div id="message" class="hidden"></div>
+
+                <!-- DANH SÁCH -->
+                <div class="card medicine-list-card">
+
+                    <div class="medicine-toolbar">
+
+                        <div class="medicine-search">
+                            <input
+                                type="text"
+                                id="search-medicine"
+                                class="form-control"
+                                placeholder="Tìm theo mã thuốc, tên biệt dược hoặc hoạt chất...">
+                        </div>
+
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            id="refresh-medicines">
+                            Làm mới
+                        </button>
+
+                    </div>
+
+                    <div class="table-wrapper">
+
+                        <table class="medicine-table">
+
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã thuốc</th>
+                                    <th>Tên biệt dược</th>
+                                    <th>Hoạt chất</th>
+                                    <th>Số lượng tồn</th>
+                                    <th>Trạng thái kho</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="medicines-table">
+
+                                <tr>
+                                    <td colspan="7" class="text-center">
+                                        Đang tải dữ liệu...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div class="medicine-table-footer">
+                        <span id="medicine-result-count">
+                            0 thuốc
+                        </span>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- FOOTER -->
+            <div id="footer-container"></div>
+
+        </main>
+
+    </div>
+
+
+    <!-- ============================================== -->
+    <!-- MODAL THÊM / SỬA THUỐC -->
+    <!-- ============================================== -->
+
+    <div class="modal" id="medicine-form-modal">
+
+        <div class="modal-content medicine-modal-content">
+
+            <div class="modal-header">
+
+                <h2 id="medicine-form-title">
+                    Thêm thuốc
+                </h2>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="close-medicine-form">
+                    &times;
+                </button>
+
+            </div>
+
+            <form id="medicine-form">
+
+                <div class="modal-body">
+
+                    <input
+                        type="hidden"
+                        id="medicine-form-mode"
+                        value="create">
+
+                    <!-- MÃ THUỐC -->
+                    <div class="form-group">
+
+                        <label for="ma_thuoc">
+                            Mã thuốc
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="ma_thuoc"
+                            class="form-control"
+                            maxlength="20"
+                            placeholder="Ví dụ: T001"
+                            required>
+
+                    </div>
+
+                    <!-- TÊN BIỆT DƯỢC -->
+                    <div class="form-group">
+
+                        <label for="ten_biet_duoc">
+                            Tên biệt dược
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="ten_biet_duoc"
+                            class="form-control"
+                            maxlength="100"
+                            placeholder="Nhập tên biệt dược"
+                            required>
+
+                    </div>
+
+                    <!-- HOẠT CHẤT -->
+                    <div class="form-group">
+
+                        <label for="hoat_chat">
+                            Hoạt chất
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="hoat_chat"
+                            class="form-control"
+                            maxlength="100"
+                            placeholder="Nhập hoạt chất"
+                            required>
+
+                    </div>
+
+                    <!-- SỐ LƯỢNG TỒN -->
+                    <div class="form-group">
+
+                        <label for="so_luong_ton">
+                            Số lượng tồn kho
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="number"
+                            id="so_luong_ton"
+                            class="form-control"
+                            min="0"
+                            step="1"
+                            value="0"
+                            required>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        id="cancel-medicine-form">
+                        Hủy
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        id="save-medicine">
+                        Lưu thuốc
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================================== -->
+    <!-- MODAL CHI TIẾT THUỐC -->
+    <!-- ============================================== -->
+
+    <div class="modal" id="medicine-detail-modal">
+
+        <div class="modal-content medicine-modal-content">
+
+            <div class="modal-header">
+
+                <h2>Chi tiết thuốc</h2>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="close-medicine-detail">
+                    &times;
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+                <div id="medicine-detail"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================================== -->
+    <!-- MODAL XÁC NHẬN XÓA -->
+    <!-- ============================================== -->
+
+    <div class="modal" id="delete-medicine-modal">
+
+        <div class="modal-content medicine-delete-content">
+
+            <div class="modal-header">
+
+                <h2>Xác nhận xóa thuốc</h2>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="close-delete-medicine">
+                    &times;
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <p>
+                    Bạn có chắc chắn muốn xóa thuốc:
+                </p>
+
+                <strong id="delete-medicine-name"></strong>
+
+                <p class="delete-warning">
+                    Lưu ý: Không thể xóa thuốc đã được sử dụng trong đơn thuốc.
+                </p>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    id="cancel-delete-medicine">
+                    Hủy
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    id="confirm-delete-medicine">
+                    Xác nhận xóa
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+    <script src="../js/api.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/medicines.js"></script>
+
+</body>
+
+</html>

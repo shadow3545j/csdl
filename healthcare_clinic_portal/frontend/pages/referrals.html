@@ -1,0 +1,437 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý chuyển tuyến | HealthCare</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../css/referrals.css">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <div id="sidebar-container"></div>
+
+    <main class="main-content">
+
+        <div id="navbar-container"></div>
+
+        <section class="page-content" id="referrals-page">
+
+            <!-- TIÊU ĐỀ -->
+            <div class="page-heading">
+                <div>
+                    <h1>Quản lý phiếu chuyển tuyến</h1>
+                    <p>Quản lý, theo dõi và xử lý các phiếu chuyển bệnh nhân đến bác sĩ chuyên khoa.</p>
+                </div>
+
+                <button
+                    class="btn btn-primary"
+                    id="btn-add-referral"
+                    data-referral-permission="create"
+                >
+                    + Tạo phiếu chuyển tuyến
+                </button>
+            </div>
+
+            <!-- THỐNG KÊ -->
+            <div class="referral-stats">
+
+                <div class="card stat-card">
+                    <div class="stat-icon blue">▣</div>
+                    <div>
+                        <p>Tổng phiếu chuyển tuyến</p>
+                        <h2 id="total-referrals">0</h2>
+                    </div>
+                </div>
+
+                <div class="card stat-card">
+                    <div class="stat-icon orange">◷</div>
+                    <div>
+                        <p>Đang chờ tiếp nhận</p>
+                        <h2 id="pending-referrals">0</h2>
+                    </div>
+                </div>
+
+                <div class="card stat-card">
+                    <div class="stat-icon green">✓</div>
+                    <div>
+                        <p>Đã tiếp nhận</p>
+                        <h2 id="accepted-referrals">0</h2>
+                    </div>
+                </div>
+
+                <div class="card stat-card">
+                    <div class="stat-icon red">●</div>
+                    <div>
+                        <p>Đã hoàn thành</p>
+                        <h2 id="completed-referrals">0</h2>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- THÔNG BÁO -->
+            <div id="message"></div>
+
+            <!-- DANH SÁCH PHIẾU -->
+            <div class="card referral-card">
+
+                <div class="referral-toolbar">
+
+                    <div class="referral-search">
+                        <input
+                            type="text"
+                            id="search-referral"
+                            class="form-control"
+                            placeholder="Tìm mã phiếu, bệnh nhân, bác sĩ..."
+                        >
+                    </div>
+
+                    <select id="filter-referral-status" class="form-control">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="Pending">Chờ tiếp nhận</option>
+                        <option value="Accepted">Đã tiếp nhận</option>
+                        <option value="Completed">Đã hoàn thành</option>
+                    </select>
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        id="refresh-referrals"
+                    >
+                        ↻ Làm mới
+                    </button>
+
+                </div>
+
+                <!-- BẢNG -->
+                <div class="table-wrapper">
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Mã phiếu</th>
+                                <th>Bệnh nhân</th>
+                                <th>Bác sĩ chuyển</th>
+                                <th>Chuyên khoa</th>
+                                <th>Bác sĩ nhận</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="referrals-table">
+                            <tr>
+                                <td colspan="8" style="text-align:center;">
+                                    Đang tải dữ liệu...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="referral-footer">
+                    <span id="referral-result-count">0 phiếu chuyển tuyến</span>
+                </div>
+
+            </div>
+
+        </section>
+
+        <div id="footer-container"></div>
+
+    </main>
+
+</div>
+
+
+<!-- =====================================
+     MODAL: TẠO PHIẾU CHUYỂN TUYẾN
+===================================== -->
+
+<div class="modal" id="referral-form-modal">
+
+    <div class="modal-content referral-modal-content">
+
+        <div class="modal-header">
+            <h2>Tạo phiếu chuyển tuyến</h2>
+
+            <button
+                type="button"
+                class="modal-close"
+                id="close-referral-form"
+            >
+                ×
+            </button>
+        </div>
+
+        <form id="referral-form">
+
+            <div class="modal-body">
+
+                <div id="referral-form-message"></div>
+
+                <div class="referral-form-notice">
+                    <strong>Lưu ý:</strong>
+                    Chỉ những lịch hẹn đang trong trạng thái khám
+                    và chưa có phiếu chuyển tuyến mới được lựa chọn.
+                </div>
+
+                <!-- LỊCH HẸN -->
+                <div class="form-group">
+                    <label for="referral-appointment">
+                        Lịch hẹn khám cần chuyển tuyến *
+                    </label>
+
+                    <select
+                        id="referral-appointment"
+                        class="form-control"
+                        required
+                    >
+                        <option value="">Đang tải lịch hẹn...</option>
+                    </select>
+                </div>
+
+                <!-- CHUYÊN KHOA -->
+                <div class="form-group">
+                    <label for="referral-specialty">
+                        Chuyên khoa tiếp nhận *
+                    </label>
+
+                    <select
+                        id="referral-specialty"
+                        class="form-control"
+                        required
+                    >
+                        <option value="">Chọn chuyên khoa</option>
+                    </select>
+                </div>
+
+                <!-- BÁC SĨ CHUYÊN KHOA -->
+                <div class="form-group">
+                    <label for="referral-specialist">
+                        Bác sĩ chuyên khoa tiếp nhận *
+                    </label>
+
+                    <select
+                        id="referral-specialist"
+                        class="form-control"
+                        required
+                        disabled
+                    >
+                        <option value="">Vui lòng chọn chuyên khoa trước</option>
+                    </select>
+
+                    <small class="form-note">
+                        Danh sách bác sĩ sẽ được lọc theo chuyên khoa đã chọn.
+                    </small>
+                </div>
+
+                <!-- LÝ DO -->
+                <div class="form-group">
+                    <label for="referral-reason">
+                        Lý do chuyển tuyến *
+                    </label>
+
+                    <textarea
+                        id="referral-reason"
+                        class="form-control"
+                        rows="5"
+                        placeholder="Nhập tình trạng bệnh, lý do cần chuyển đến bác sĩ chuyên khoa và các thông tin cần thiết..."
+                        required
+                    ></textarea>
+                </div>
+
+                <div class="referral-form-note">
+                    <p>
+                        <strong>Quy trình:</strong>
+                        Sau khi tạo phiếu, trạng thái phiếu sẽ là
+                        <strong>Chờ tiếp nhận</strong> và lịch hẹn sẽ
+                        được chuyển sang trạng thái <strong>Đã chuyển tuyến</strong>.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    id="cancel-referral-form"
+                >
+                    Hủy
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="save-referral"
+                >
+                    Tạo phiếu chuyển tuyến
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================
+     MODAL: CHI TIẾT PHIẾU CHUYỂN TUYẾN
+===================================== -->
+
+<div class="modal" id="referral-detail-modal">
+
+    <div class="modal-content referral-detail-modal-content">
+
+        <div class="modal-header">
+            <h2>Chi tiết phiếu chuyển tuyến</h2>
+
+            <button
+                type="button"
+                class="modal-close"
+                id="close-referral-detail"
+            >
+                ×
+            </button>
+        </div>
+
+        <div class="modal-body" id="referral-detail">
+
+            <div class="loading-placeholder">
+                Đang tải thông tin phiếu chuyển tuyến...
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button
+                type="button"
+                class="btn btn-secondary"
+                id="close-referral-detail-footer"
+            >
+                Đóng
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================
+     MODAL: CẬP NHẬT TRẠNG THÁI
+===================================== -->
+
+<div class="modal" id="referral-status-modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h2>Xử lý phiếu chuyển tuyến</h2>
+
+            <button
+                type="button"
+                class="modal-close"
+                id="close-referral-status"
+            >
+                ×
+            </button>
+        </div>
+
+        <form id="referral-status-form">
+
+            <div class="modal-body">
+
+                <div id="referral-status-message"></div>
+
+                <input
+                    type="hidden"
+                    id="status-referral-id"
+                >
+
+                <div class="form-group">
+                    <label for="current-referral-status">
+                        Trạng thái hiện tại
+                    </label>
+
+                    <input
+                        type="text"
+                        id="current-referral-status"
+                        class="form-control"
+                        readonly
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="new-referral-status">
+                        Trạng thái cập nhật *
+                    </label>
+
+                    <select
+                        id="new-referral-status"
+                        class="form-control"
+                        required
+                    >
+                        <option value="">Chọn trạng thái</option>
+                        <option value="Accepted">Đã tiếp nhận</option>
+                        <option value="Completed">Đã hoàn thành</option>
+                    </select>
+                </div>
+
+                <p class="form-note">
+                    Bác sĩ chuyên khoa tiếp nhận phiếu có thể xác nhận
+                    tiếp nhận và hoàn thành theo đúng trình tự nghiệp vụ.
+                    Quản trị viên có quyền xử lý theo phân quyền hệ thống.
+                </p>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    id="cancel-referral-status"
+                >
+                    Hủy
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="save-referral-status"
+                >
+                    Cập nhật trạng thái
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script src="../js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/referrals.js"></script>
+
+</body>
+</html>

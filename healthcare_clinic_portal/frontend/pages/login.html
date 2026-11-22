@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập | Healthcare Clinic</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+
+<body class="login-body">
+
+    <main class="login-page">
+
+        <section class="login-brand-panel">
+            <div class="login-brand-content">
+
+                <div class="login-brand-logo">
+                    <div class="login-heart-icon">✚</div>
+                    <div>
+                        <h1>Healthcare Clinic</h1>
+                        <p>Better Care, Healthier Tomorrow</p>
+                    </div>
+                </div>
+
+                <div class="login-introduction">
+                    <span class="login-eyebrow">HEALTHCARE MANAGEMENT SYSTEM</span>
+
+                    <h2>
+                        Chăm sóc sức khỏe<br>
+                        là trách nhiệm của chúng tôi
+                    </h2>
+
+                    <p>
+                        Hệ thống quản lý phòng khám giúp kết nối
+                        bệnh nhân, bác sĩ và nhân viên y tế,
+                        mang đến trải nghiệm chăm sóc sức khỏe
+                        hiệu quả và chuyên nghiệp.
+                    </p>
+
+                    <div class="login-features">
+                        <div class="login-feature">
+                            <span class="feature-icon">✚</span>
+                            <div>
+                                <strong>Quản lý bệnh nhân</strong>
+                                <small>Thông tin được quản lý tập trung</small>
+                            </div>
+                        </div>
+
+                        <div class="login-feature">
+                            <span class="feature-icon">♡</span>
+                            <div>
+                                <strong>Chăm sóc sức khỏe</strong>
+                                <small>Hỗ trợ quy trình khám chữa bệnh</small>
+                            </div>
+                        </div>
+
+                        <div class="login-feature">
+                            <span class="feature-icon">✓</span>
+                            <div>
+                                <strong>Bảo mật thông tin</strong>
+                                <small>Phân quyền theo từng vai trò</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="login-brand-footer">
+                    © 2026 Healthcare Clinic. All rights reserved.
+                </div>
+
+            </div>
+        </section>
+
+        <section class="login-form-panel">
+
+            <div class="login-form-card">
+
+                <div class="login-mobile-logo">
+                    <div class="login-heart-icon">✚</div>
+                    <strong>Healthcare Clinic</strong>
+                </div>
+
+                <div class="login-heading">
+                    <span class="login-heading-label">WELCOME BACK</span>
+                    <h2>Đăng nhập</h2>
+                    <p>Vui lòng đăng nhập để tiếp tục sử dụng hệ thống.</p>
+                </div>
+
+                <div
+                    id="login-message"
+                    class="auth-message hidden"
+                    role="alert"
+                    aria-live="polite">
+                </div>
+
+                <form id="login-form">
+
+                    <div class="form-group">
+                        <label for="ten_dang_nhap">Tên đăng nhập</label>
+
+                        <div class="login-input-wrap">
+                            <span class="login-input-icon">♙</span>
+                            <input
+                                type="text"
+                                id="ten_dang_nhap"
+                                name="ten_dang_nhap"
+                                class="form-control"
+                                placeholder="Nhập tên đăng nhập"
+                                autocomplete="username"
+                                required
+                                autofocus>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mat_khau">Mật khẩu</label>
+
+                        <div class="login-input-wrap">
+                            <span class="login-input-icon">♧</span>
+                            <input
+                                type="password"
+                                id="mat_khau"
+                                name="mat_khau"
+                                class="form-control"
+                                placeholder="Nhập mật khẩu"
+                                autocomplete="current-password"
+                                required>
+                        </div>
+                    </div>
+
+                    <button
+                        type="submit"
+                        id="login-submit"
+                        class="btn btn-primary auth-submit">
+                        Đăng nhập
+                    </button>
+
+                </form>
+
+                <div class="login-security">
+                    <span>🔒</span>
+                    <p>Thông tin đăng nhập của bạn được bảo mật.</p>
+                </div>
+
+                <div class="login-divider"></div>
+
+                <div class="login-bottom">
+                    <p>Healthcare Clinic</p>
+                    <span>Hệ thống quản lý và chăm sóc sức khỏe</span>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+
+</body>
+</html>

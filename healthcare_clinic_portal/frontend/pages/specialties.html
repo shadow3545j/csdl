@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quản lý chuyên khoa</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../css/specialties.css">
+</head>
+
+<body>
+
+    <div class="app-layout">
+
+        <!-- SIDEBAR -->
+        <div id="sidebar-container"></div>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+
+            <!-- NAVBAR -->
+            <div id="navbar-container"></div>
+
+            <section class="page-content" id="specialties-page">
+
+                <!-- TIÊU ĐỀ -->
+                <div class="page-heading">
+                    <div>
+                        <h1>Quản lý chuyên khoa</h1>
+                        <p>Quản lý thông tin các chuyên khoa của phòng khám.</p>
+                    </div>
+
+                    <button
+    type="button"
+    class="btn btn-primary"
+    id="btn-add-specialty"
+    data-permission="specialties.create">
+    + Thêm chuyên khoa
+</button>
+                </div>
+
+                <!-- THỐNG KÊ -->
+                <div class="specialty-statistics">
+
+                    <div class="card specialty-stat-card">
+                        <div class="specialty-stat-icon">🏥</div>
+                        <div>
+                            <p>Tổng chuyên khoa</p>
+                            <h2 id="total-specialties">0</h2>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- THÔNG BÁO -->
+                <div id="message" class="hidden"></div>
+
+                <!-- DANH SÁCH -->
+                <div class="card specialty-list-card">
+
+                    <div class="specialty-toolbar">
+
+                        <div class="specialty-search">
+                            <input
+                                type="text"
+                                id="search-specialty"
+                                class="form-control"
+                                placeholder="Tìm theo mã hoặc tên chuyên khoa...">
+                        </div>
+
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            id="refresh-specialties">
+                            Làm mới
+                        </button>
+
+                    </div>
+
+                    <div class="table-wrapper">
+
+                        <table class="specialty-table">
+
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã chuyên khoa</th>
+                                    <th>Mã định danh</th>
+                                    <th>Tên chuyên khoa</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="specialties-table">
+
+                                <tr>
+                                    <td colspan="5" class="text-center">
+                                        Đang tải dữ liệu...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div class="specialty-table-footer">
+                        <span id="specialty-result-count">
+                            0 chuyên khoa
+                        </span>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- FOOTER -->
+            <div id="footer-container"></div>
+
+        </main>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- MODAL THÊM / SỬA CHUYÊN KHOA -->
+    <!-- ================================================= -->
+
+    <div class="modal" id="specialty-form-modal">
+
+        <div class="modal-content specialty-modal-content">
+
+            <div class="modal-header">
+
+                <h2 id="specialty-form-title">
+                    Thêm chuyên khoa
+                </h2>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="close-specialty-form">
+                    &times;
+                </button>
+
+            </div>
+
+            <form id="specialty-form">
+
+                <div class="modal-body">
+
+                    <input
+                        type="hidden"
+                        id="specialty-form-mode"
+                        value="create">
+
+                    <!-- MÃ CHUYÊN KHOA -->
+                    <div class="form-group">
+
+                        <label for="ma_chuyen_khoa">
+                            Mã chuyên khoa
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="ma_chuyen_khoa"
+                            class="form-control"
+                            maxlength="20"
+                            placeholder="Ví dụ: CK004"
+                            required>
+
+                    </div>
+
+                    <!-- MÃ ĐỊNH DANH -->
+                    <div class="form-group">
+
+                        <label for="ma_dinh_danh">
+                            Mã định danh
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="ma_dinh_danh"
+                            class="form-control"
+                            maxlength="20"
+                            placeholder="Ví dụ: ORTH"
+                            required>
+
+                    </div>
+
+                    <!-- TÊN CHUYÊN KHOA -->
+                    <div class="form-group">
+
+                        <label for="ten_chuyen_khoa">
+                            Tên chuyên khoa
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="ten_chuyen_khoa"
+                            class="form-control"
+                            maxlength="100"
+                            placeholder="Nhập tên chuyên khoa"
+                            required>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        id="cancel-specialty-form">
+                        Hủy
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        id="save-specialty">
+                        Lưu chuyên khoa
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- MODAL CHI TIẾT CHUYÊN KHOA -->
+    <!-- ================================================= -->
+
+    <div class="modal" id="specialty-detail-modal">
+
+        <div class="modal-content specialty-modal-content">
+
+            <div class="modal-header">
+
+                <h2>Chi tiết chuyên khoa</h2>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="close-specialty-detail">
+                    &times;
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+                <div id="specialty-detail"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- MODAL XÁC NHẬN XÓA -->
+    <!-- ================================================= -->
+
+    <div class="modal" id="delete-specialty-modal">
+
+        <div class="modal-content specialty-delete-content">
+
+            <div class="modal-header">
+
+                <h2>Xác nhận xóa chuyên khoa</h2>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="close-delete-specialty">
+                    &times;
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <p>
+                    Bạn có chắc chắn muốn xóa chuyên khoa:
+                </p>
+
+                <strong id="delete-specialty-name"></strong>
+
+                <p class="delete-warning">
+                    Lưu ý: Không thể xóa chuyên khoa đang được bác sĩ sử dụng.
+                </p>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    id="cancel-delete-specialty">
+                    Hủy
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    id="confirm-delete-specialty">
+                    Xác nhận xóa
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+    <script src="../js/api.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/specialties.js"></script>
+
+</body>
+
+</html>

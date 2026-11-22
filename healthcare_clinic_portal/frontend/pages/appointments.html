@@ -1,0 +1,479 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý lịch hẹn | HealthCare</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../css/appointments.css">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <div id="sidebar-container"></div>
+
+    <main class="main-content">
+
+        <div id="navbar-container"></div>
+
+        <section class="page-content" id="appointments-page">
+
+            <!-- TIÊU ĐỀ -->
+            <div class="page-heading">
+                <div>
+                    <h1>Quản lý lịch hẹn khám</h1>
+                    <p>Quản lý và theo dõi lịch khám của bệnh nhân.</p>
+                </div>
+
+                <button
+                    class="btn btn-primary"
+                    id="btn-add-appointment"
+                    data-appointment-permission="create"
+                >
+                    + Đặt lịch khám
+                </button>
+            </div>
+
+            <!-- THỐNG KÊ -->
+            <div class="appointment-stats">
+
+                <div class="card stat-card">
+                    <div class="stat-icon blue">▣</div>
+                    <div>
+                        <p>Tổng lịch hẹn</p>
+                        <h2 id="total-appointments">0</h2>
+                    </div>
+                </div>
+
+                <div class="card stat-card">
+                    <div class="stat-icon green">✓</div>
+                    <div>
+                        <p>Đã hoàn thành</p>
+                        <h2 id="completed-appointments">0</h2>
+                    </div>
+                </div>
+
+                <div class="card stat-card">
+                    <div class="stat-icon orange">◷</div>
+                    <div>
+                        <p>Đang chờ</p>
+                        <h2 id="scheduled-appointments">0</h2>
+                    </div>
+                </div>
+
+                <div class="card stat-card">
+                    <div class="stat-icon red">×</div>
+                    <div>
+                        <p>Đã hủy</p>
+                        <h2 id="cancelled-appointments">0</h2>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- THÔNG BÁO -->
+            <div id="message"></div>
+
+            <!-- DANH SÁCH -->
+            <div class="card appointment-card">
+
+                <div class="appointment-toolbar">
+
+                    <div class="appointment-search">
+                        <input
+                            type="text"
+                            id="search-appointment"
+                            class="form-control"
+                            placeholder="Tìm mã lịch, bệnh nhân, bác sĩ..."
+                        >
+                    </div>
+
+                    <select id="filter-status" class="form-control">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="Scheduled">Đang chờ</option>
+                        <option value="In-Consultation">Đang khám</option>
+                        <option value="Referred">Đã chuyển tuyến</option>
+                        <option value="Completed">Đã hoàn thành</option>
+                        <option value="Cancelled">Đã hủy</option>
+                        <option value="No-Show">Không đến</option>
+                    </select>
+
+                    <select id="filter-type" class="form-control">
+                        <option value="">Tất cả loại hình</option>
+                        <option value="In-clinic">Khám trực tiếp</option>
+                        <option value="Telemedicine">Khám từ xa</option>
+                    </select>
+
+                    <button class="btn btn-secondary" id="refresh-appointments">
+                        ↻ Làm mới
+                    </button>
+
+                </div>
+
+                <!-- BẢNG -->
+                <div class="table-wrapper">
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Mã lịch hẹn</th>
+                                <th>Bệnh nhân</th>
+                                <th>Bác sĩ</th>
+                                <th>Thời gian khám</th>
+                                <th>Loại hình</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="appointments-table">
+                            <tr>
+                                <td colspan="8" style="text-align:center;">
+                                    Đang tải dữ liệu...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="appointment-footer">
+                    <span id="appointment-result-count">
+                        0 lịch hẹn
+                    </span>
+                </div>
+
+            </div>
+
+        </section>
+
+        <div id="footer-container"></div>
+
+    </main>
+
+</div>
+
+
+<!-- =====================================
+     MODAL: THÊM LỊCH HẸN
+===================================== -->
+
+<div class="modal" id="appointment-form-modal">
+
+    <div class="modal-content appointment-modal-content">
+
+        <div class="modal-header">
+            <h2 id="appointment-form-title">Đặt lịch khám mới</h2>
+
+            <button
+                type="button"
+                class="modal-close"
+                id="close-appointment-form"
+            >
+                ×
+            </button>
+        </div>
+
+        <form id="appointment-form">
+
+            <div class="modal-body">
+
+                <div id="appointment-form-message"></div>
+
+                <div class="form-group">
+                    <label for="ma_lich_hen">Mã lịch hẹn *</label>
+                    <input
+                        type="text"
+                        id="ma_lich_hen"
+                        class="form-control"
+                        maxlength="20"
+                        placeholder="Ví dụ: LH015"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="ma_benh_nhan">Bệnh nhân *</label>
+                    <select
+                        id="ma_benh_nhan"
+                        class="form-control"
+                        required
+                    >
+                        <option value="">Đang tải bệnh nhân...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="ma_bac_si">Bác sĩ *</label>
+                    <select
+                        id="ma_bac_si"
+                        class="form-control"
+                        required
+                    >
+                        <option value="">Đang tải bác sĩ...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="thoi_gian_hen">Thời gian khám *</label>
+                    <input
+                        type="datetime-local"
+                        id="thoi_gian_hen"
+                        class="form-control"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="loai_hinh_kham">Loại hình khám *</label>
+                    <select
+                        id="loai_hinh_kham"
+                        class="form-control"
+                        required
+                    >
+                        <option value="In-clinic">Khám trực tiếp</option>
+                        <option value="Telemedicine">Khám từ xa</option>
+                    </select>
+                </div>
+
+                <!-- THÔNG TIN KHÁM TỪ XA -->
+                <div id="telemedicine-fields" class="hidden">
+
+                    <h3>Thông tin phiên khám từ xa</h3>
+
+                    <div class="form-group">
+                        <label for="ma_phien_kham">Mã phiên khám *</label>
+                        <input
+                            type="text"
+                            id="ma_phien_kham"
+                            class="form-control"
+                            maxlength="20"
+                            placeholder="Ví dụ: PK009"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duong_dan_video">Đường dẫn video *</label>
+                        <input
+                            type="text"
+                            id="duong_dan_video"
+                            class="form-control"
+                            placeholder="Nhập đường dẫn video"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="khoa_ma_hoa">Khóa mã hóa *</label>
+                        <textarea
+                            id="khoa_ma_hoa"
+                            class="form-control"
+                            rows="3"
+                            placeholder="Nhập khóa mã hóa"
+                        ></textarea>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    id="cancel-appointment-form"
+                >
+                    Hủy
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="save-appointment"
+                >
+                    Đặt lịch
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- =====================================
+     MODAL: CHI TIẾT LỊCH HẸN
+===================================== -->
+
+<div class="modal" id="appointment-detail-modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h2>Chi tiết lịch hẹn</h2>
+
+            <button
+                type="button"
+                class="modal-close"
+                id="close-appointment-detail"
+            >
+                ×
+            </button>
+        </div>
+
+        <div class="modal-body" id="appointment-detail"></div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================
+     MODAL: CẬP NHẬT TRẠNG THÁI
+===================================== -->
+
+<div class="modal" id="appointment-status-modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h2>Cập nhật trạng thái</h2>
+
+            <button
+                type="button"
+                class="modal-close"
+                id="close-appointment-status"
+            >
+                ×
+            </button>
+        </div>
+
+        <form id="appointment-status-form">
+
+            <div class="modal-body">
+
+                <input type="hidden" id="status-appointment-id">
+
+                <div class="form-group">
+                    <label for="new-appointment-status">
+                        Trạng thái mới
+                    </label>
+
+                    <select
+                        id="new-appointment-status"
+                        class="form-control"
+                        required
+                    >
+                        <option value="Scheduled">Đang chờ</option>
+                        <option value="In-Consultation">Đang khám</option>
+                        <option value="Referred">Đã chuyển tuyến</option>
+                        <option value="Completed">Đã hoàn thành</option>
+                        <option value="Cancelled">Đã hủy</option>
+                        <option value="No-Show">Không đến</option>
+                    </select>
+                </div>
+
+                <p class="form-note">
+                    Việc chuyển trạng thái phải tuân thủ quy tắc nghiệp vụ
+                    được thiết lập trong MySQL.
+                </p>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    id="cancel-appointment-status"
+                >
+                    Hủy
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="save-appointment-status"
+                >
+                    Cập nhật
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================
+     MODAL: XÓA LỊCH HẸN
+===================================== -->
+
+<div class="modal" id="delete-appointment-modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <h2>Xác nhận xóa</h2>
+
+            <button
+                type="button"
+                class="modal-close"
+                id="close-delete-appointment"
+            >
+                ×
+            </button>
+        </div>
+
+        <div class="modal-body">
+
+            <input type="hidden" id="delete-appointment-id">
+
+            <p>
+                Bạn có chắc chắn muốn xóa lịch hẹn
+                <strong id="delete-appointment-name"></strong>?
+            </p>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button
+                type="button"
+                class="btn btn-secondary"
+                id="cancel-delete-appointment"
+            >
+                Hủy
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-danger"
+                id="confirm-delete-appointment"
+            >
+                Xóa lịch hẹn
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="../js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/appointments.js"></script>
+
+</body>
+</html>

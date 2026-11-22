@@ -1,0 +1,401 @@
+
+/* =====================================================
+   SPECIALTIES PAGE
+===================================================== */
+
+#specialties-page {
+    padding-bottom: 30px;
+}
+
+/* =====================================================
+   STATISTICS
+===================================================== */
+
+.specialty-statistics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.specialty-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 22px;
+    border-radius: 12px;
+}
+
+.specialty-stat-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: var(--primary-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+}
+
+.specialty-stat-card p {
+    margin: 0 0 6px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.specialty-stat-card h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: 25px;
+    font-weight: 700;
+}
+
+/* =====================================================
+   LIST CARD
+===================================================== */
+
+.specialty-list-card {
+    padding: 22px;
+    border-radius: 12px;
+}
+
+/* =====================================================
+   TOOLBAR
+===================================================== */
+
+.specialty-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.specialty-search {
+    width: 100%;
+    max-width: 420px;
+}
+
+.specialty-search .form-control {
+    width: 100%;
+    min-height: 42px;
+}
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.specialty-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+}
+
+.specialty-table thead {
+    background: var(--primary-light);
+}
+
+.specialty-table th {
+    padding: 15px 16px;
+    text-align: left;
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.specialty-table td {
+    padding: 15px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.specialty-table tbody tr:hover {
+    background: #f7fbfd;
+}
+
+.specialty-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.specialty-table td:first-child,
+.specialty-table th:first-child {
+    text-align: center;
+    width: 65px;
+}
+
+.specialty-table .text-center {
+    text-align: center;
+    padding: 30px 15px;
+    color: var(--muted);
+}
+
+/* =====================================================
+   ACTION BUTTONS
+===================================================== */
+
+.specialty-table .actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+}
+
+.specialty-table .btn {
+    padding: 7px 11px;
+    font-size: 12px;
+    border-radius: 6px;
+}
+
+/* =====================================================
+   TABLE FOOTER
+===================================================== */
+
+.specialty-table-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 18px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* =====================================================
+   FORM MODAL
+===================================================== */
+
+.specialty-modal-content {
+    width: 100%;
+    max-width: 520px;
+}
+
+.specialty-modal-content .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+}
+
+.specialty-modal-content .modal-header h2 {
+    margin: 0;
+    font-size: 19px;
+    color: var(--text);
+}
+
+.specialty-modal-content .modal-body {
+    padding: 24px;
+}
+
+.specialty-modal-content .form-group {
+    margin-bottom: 20px;
+}
+
+.specialty-modal-content .form-group:last-child {
+    margin-bottom: 0;
+}
+
+.specialty-modal-content .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.specialty-modal-content .form-control {
+    width: 100%;
+    min-height: 42px;
+}
+
+.specialty-modal-content .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 18px 24px;
+    border-top: 1px solid var(--border);
+}
+
+/* =====================================================
+   MODAL CLOSE BUTTON
+===================================================== */
+
+.specialty-modal-content .modal-close,
+.specialty-delete-content .modal-close {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-size: 27px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.specialty-modal-content .modal-close:hover,
+.specialty-delete-content .modal-close:hover {
+    color: var(--danger);
+}
+
+/* =====================================================
+   DETAIL MODAL
+===================================================== */
+
+#specialty-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.specialty-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.specialty-detail-row:last-child {
+    border-bottom: none;
+}
+
+.specialty-detail-row strong {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.specialty-detail-row span {
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: right;
+}
+
+/* =====================================================
+   DELETE MODAL
+===================================================== */
+
+.specialty-delete-content {
+    width: 100%;
+    max-width: 440px;
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.specialty-delete-content .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+}
+
+.specialty-delete-content .modal-header h2 {
+    margin: 0;
+    color: var(--text);
+    font-size: 18px;
+}
+
+.specialty-delete-content .modal-body {
+    padding: 24px;
+    color: var(--text);
+    font-size: 14px;
+}
+
+#delete-specialty-name {
+    display: block;
+    margin: 10px 0;
+    font-size: 16px;
+    color: var(--primary);
+}
+
+.delete-warning {
+    margin-top: 18px;
+    padding: 12px;
+    border-radius: 8px;
+    background: #fff7e9;
+    color: #a56a15;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.specialty-delete-content .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 18px 24px;
+    border-top: 1px solid var(--border);
+}
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+#message:not(.hidden) {
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    border-radius: 8px;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 768px) {
+
+    .specialty-list-card {
+        padding: 15px;
+    }
+
+    .specialty-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .specialty-search {
+        max-width: none;
+    }
+
+    .specialty-toolbar .btn {
+        width: 100%;
+    }
+
+    .specialty-modal-content .modal-body {
+        padding: 18px;
+    }
+
+    .specialty-modal-content .modal-footer,
+    .specialty-delete-content .modal-footer {
+        padding: 15px 18px;
+    }
+
+    .specialty-detail-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .specialty-detail-row span {
+        text-align: left;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .specialty-stat-card {
+        padding: 16px;
+    }
+
+    .specialty-stat-card h2 {
+        font-size: 22px;
+    }
+
+    .specialty-modal-content .modal-header h2,
+    .specialty-delete-content .modal-header h2 {
+        font-size: 16px;
+    }
+}

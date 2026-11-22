@@ -1,0 +1,577 @@
+
+/* =====================================================
+   DOCTORS PAGE
+   Healthcare Clinic Portal
+===================================================== */
+
+.doctors-page {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* =====================================================
+   1. PAGE HEADING
+===================================================== */
+
+.doctors-heading {
+    margin-bottom: 25px;
+}
+
+.doctors-heading .btn {
+    min-height: 42px;
+    padding: 10px 20px;
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   2. STATISTICS
+===================================================== */
+
+.doctor-statistics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 23px;
+}
+
+.doctor-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-height: 105px;
+    padding: 20px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    box-shadow: var(--shadow);
+    transition: transform .2s, box-shadow .2s;
+}
+
+.doctor-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 22px rgba(21, 61, 88, .11);
+}
+
+.stat-icon {
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: var(--primary-light);
+    font-size: 25px;
+}
+
+.doctor-stat-card:nth-child(2) .stat-icon {
+    background: #e5f6ed;
+}
+
+.doctor-stat-card:nth-child(3) .stat-icon {
+    background: #f0eaff;
+}
+
+.doctor-stat-card span {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.doctor-stat-card h2 {
+    color: var(--text);
+    font-size: 25px;
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   3. DOCTOR CARD
+===================================================== */
+
+.doctor-card {
+    padding: 21px;
+}
+
+.doctor-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 13px;
+    margin-bottom: 23px;
+}
+
+.doctor-search {
+    flex: 1;
+    min-width: 230px;
+    max-width: 440px;
+}
+
+.doctor-search input {
+    min-height: 42px;
+}
+
+.doctor-filters {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+.doctor-filters select {
+    min-width: 160px;
+    min-height: 42px;
+}
+
+.doctor-filters button {
+    min-height: 42px;
+}
+
+
+/* =====================================================
+   4. TABLE HEADER
+===================================================== */
+
+.doctor-table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.doctor-table-header h3 {
+    color: var(--text);
+    font-size: 16px;
+    margin-bottom: 3px;
+}
+
+.doctor-table-header p {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+#doctor-result-count {
+    padding: 6px 12px;
+    color: var(--primary-dark);
+    background: var(--primary-light);
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   5. DOCTOR TABLE
+===================================================== */
+
+.doctor-table {
+    min-width: 950px;
+}
+
+.doctor-table thead {
+    background: #f0f6fa;
+}
+
+.doctor-table th {
+    padding: 15px 13px;
+    font-size: 11px;
+    color: #526b80;
+    white-space: nowrap;
+}
+
+.doctor-table td {
+    padding: 14px 13px;
+    vertical-align: middle;
+}
+
+.doctor-table tbody tr {
+    transition: background .15s;
+}
+
+.doctor-table tbody tr:hover {
+    background: #f3f9fc;
+}
+
+.doctor-table .doctor-id {
+    color: var(--primary-dark);
+    font-weight: 700;
+}
+
+.doctor-name {
+    min-width: 150px;
+    color: var(--text);
+    font-weight: 600;
+}
+
+.doctor-email {
+    color: #527087;
+}
+
+.doctor-type {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.doctor-type-general {
+    color: #16845d;
+    background: #e3f7ed;
+}
+
+.doctor-type-specialist {
+    color: #6551b4;
+    background: #eee9ff;
+}
+
+.doctor-specialty {
+    color: #527087;
+    font-size: 12px;
+}
+
+.doctor-table .actions {
+    gap: 5px;
+}
+
+.doctor-table .actions button {
+    min-width: 31px;
+    min-height: 30px;
+    padding: 5px 8px;
+}
+
+
+/* =====================================================
+   6. MESSAGE
+===================================================== */
+
+#doctors-page-message {
+    display: none;
+}
+
+#message:not(.hidden) {
+    display: block;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border-radius: 7px;
+    font-size: 12px;
+}
+
+#message.message-success {
+    color: #13845e;
+    background: #e3f7ed;
+    border: 1px solid #bcebd5;
+}
+
+#message.message-error {
+    color: #c83f3f;
+    background: #fff0f0;
+    border: 1px solid #ffd1d1;
+}
+
+
+/* =====================================================
+   7. DOCTOR FORM MODAL
+===================================================== */
+
+.doctor-form-modal-content {
+    max-width: 760px;
+}
+
+.doctor-modal-close {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 7px;
+    background: #f0f4f7;
+    color: #647b8e;
+    font-size: 23px;
+    transition: .2s;
+}
+
+.doctor-modal-close:hover {
+    color: var(--danger);
+    background: #fff0f0;
+}
+
+.doctor-form-modal-content .modal-header {
+    margin-bottom: 20px;
+}
+
+.doctor-form-modal-content .modal-header h2,
+.doctor-detail-modal-content .modal-header h2 {
+    margin-bottom: 4px;
+}
+
+.doctor-form-modal-content .modal-header p,
+.doctor-detail-modal-content .modal-header p {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.doctor-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 17px;
+    row-gap: 0;
+}
+
+.doctor-form-grid .form-group {
+    min-width: 0;
+}
+
+.doctor-form-grid label span,
+.doctor-form-note span {
+    color: var(--danger);
+}
+
+.doctor-form-grid .form-control {
+    min-height: 42px;
+}
+
+.doctor-form-grid [hidden] {
+    display: none !important;
+}
+
+.doctor-form-note {
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.doctor-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 17px;
+    border-top: 1px solid var(--border);
+}
+
+
+/* =====================================================
+   8. DOCTOR DETAIL MODAL
+===================================================== */
+
+.doctor-detail-modal-content {
+    max-width: 650px;
+}
+
+.doctor-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 13px;
+}
+
+.doctor-detail-item {
+    padding: 13px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fbfdff;
+    min-width: 0;
+}
+
+.doctor-detail-item span {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    margin-bottom: 5px;
+}
+
+.doctor-detail-item strong {
+    display: block;
+    color: var(--text);
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.doctor-detail-section {
+    margin-bottom: 18px;
+}
+
+.doctor-detail-section h3 {
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: var(--primary-dark);
+}
+
+
+/* =====================================================
+   9. DELETE MODAL
+===================================================== */
+
+.doctor-delete-modal-content {
+    max-width: 420px;
+    text-align: center;
+    padding: 30px;
+}
+
+.doctor-delete-icon {
+    width: 55px;
+    height: 55px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 17px;
+    border-radius: 50%;
+    color: var(--danger);
+    background: #fff0f0;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.doctor-delete-modal-content h2 {
+    margin-bottom: 12px;
+    font-size: 19px;
+    color: var(--text);
+}
+
+.doctor-delete-modal-content p {
+    color: #526b80;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.doctor-delete-warning {
+    padding: 10px;
+    background: #fff8e9;
+    border-radius: 7px;
+    color: #9b6b20 !important;
+    font-size: 11px !important;
+}
+
+.doctor-delete-modal-content .doctor-form-actions {
+    justify-content: center;
+}
+
+
+/* =====================================================
+   10. LOADING
+===================================================== */
+
+.doctor-loading {
+    padding: 35px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.doctor-error {
+    padding: 25px;
+    text-align: center;
+    color: var(--danger);
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   11. RESPONSIVE
+===================================================== */
+
+@media (max-width: 1100px) {
+
+    .doctor-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .doctor-search {
+        max-width: 100%;
+    }
+
+    .doctor-filters {
+        width: 100%;
+    }
+
+    .doctor-filters select {
+        flex: 1;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .doctor-statistics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .doctor-stat-card {
+        min-height: 90px;
+        padding: 14px;
+    }
+
+    .doctor-stat-card h2 {
+        font-size: 21px;
+    }
+
+    .doctor-stat-card span {
+        font-size: 11px;
+    }
+
+    .doctor-card {
+        padding: 14px;
+    }
+
+    .doctor-filters {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .doctor-filters select {
+        min-width: 0;
+    }
+
+    .doctor-form-modal-content {
+        max-width: 100%;
+    }
+
+}
+
+@media (max-width: 576px) {
+
+    .doctor-statistics {
+        grid-template-columns: 1fr;
+    }
+
+    .doctor-stat-card {
+        min-height: 78px;
+    }
+
+    .doctor-filters {
+        grid-template-columns: 1fr;
+    }
+
+    .doctor-table-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .doctor-form-grid,
+    .doctor-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .doctor-form-modal-content {
+        padding: 17px;
+    }
+
+    .doctor-form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .doctor-form-actions button {
+        width: 100%;
+    }
+
+}

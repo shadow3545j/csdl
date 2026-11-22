@@ -1,0 +1,546 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quản lý bác sĩ | HealthCare Clinic</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <link rel="stylesheet" href="../css/doctors.css">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- SIDEBAR -->
+    <div id="sidebar-container"></div>
+
+    <main class="main-content">
+
+        <!-- NAVBAR -->
+        <div id="navbar-container"></div>
+
+        <section class="page-content doctors-page">
+
+            <!-- PAGE HEADING -->
+            <div class="page-heading doctors-heading">
+
+                <div>
+                    <h1>Quản lý bác sĩ</h1>
+                    <p>Quản lý thông tin, chuyên môn và hoạt động của bác sĩ.</p>
+                </div>
+
+                <button
+    type="button"
+    class="btn btn-primary"
+    id="btn-add-doctor"
+    data-permission="doctors.create"
+>
+    + Thêm bác sĩ
+</button>
+
+            </div>
+
+            <!-- STATISTICS -->
+            <div class="doctor-statistics">
+
+                <div class="doctor-stat-card">
+                    <div class="stat-icon">👨‍⚕️</div>
+                    <div>
+                        <span>Tổng bác sĩ</span>
+                        <h2 id="total-doctors">0</h2>
+                    </div>
+                </div>
+
+                <div class="doctor-stat-card">
+                    <div class="stat-icon">🏥</div>
+                    <div>
+                        <span>Bác sĩ đa khoa</span>
+                        <h2 id="total-general-doctors">0</h2>
+                    </div>
+                </div>
+
+                <div class="doctor-stat-card">
+                    <div class="stat-icon">🩺</div>
+                    <div>
+                        <span>Bác sĩ chuyên khoa</span>
+                        <h2 id="total-specialist-doctors">0</h2>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- MESSAGE -->
+            <div id="message" class="hidden"></div>
+
+            <!-- DOCTOR TABLE -->
+            <div class="card doctor-card">
+
+                <div class="doctor-toolbar">
+
+                    <div class="doctor-search">
+
+                        <input
+                            type="text"
+                            id="search-doctor"
+                            class="form-control"
+                            placeholder="Tìm theo mã, họ tên, email hoặc số điện thoại..."
+                        >
+
+                    </div>
+
+                    <div class="doctor-filters">
+
+                        <select
+                            id="filter-doctor-type"
+                            class="form-control"
+                        >
+                            <option value="">Tất cả loại bác sĩ</option>
+                            <option value="GP">Bác sĩ đa khoa</option>
+                            <option value="Specialist">Bác sĩ chuyên khoa</option>
+                        </select>
+
+                        <select
+                            id="filter-specialty"
+                            class="form-control"
+                        >
+                            <option value="">Tất cả chuyên khoa</option>
+                        </select>
+
+                        <button
+                            class="btn btn-secondary"
+                            id="refresh-doctors"
+                            type="button"
+                        >
+                            ↻ Làm mới
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="doctor-table-header">
+
+                    <div>
+                        <h3>Danh sách bác sĩ</h3>
+                        <p>Thông tin bác sĩ trong hệ thống</p>
+                    </div>
+
+                    <span id="doctor-result-count">
+                        0 bác sĩ
+                    </span>
+
+                </div>
+
+                <div class="table-wrapper">
+
+                    <table class="doctor-table">
+
+                        <thead>
+                            <tr>
+                                <th>Mã bác sĩ</th>
+                                <th>Họ và tên</th>
+                                <th>Email</th>
+                                <th>Số điện thoại</th>
+                                <th>Loại bác sĩ</th>
+                                <th>Chuyên khoa</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="doctors-table">
+
+                            <tr>
+                                <td colspan="7" class="empty-state">
+                                    Đang tải dữ liệu...
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- FOOTER -->
+        <div id="footer-container"></div>
+
+    </main>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL THÊM / SỬA BÁC SĨ
+===================================================== -->
+
+<div class="modal" id="doctor-form-modal">
+
+    <div class="modal-content doctor-form-modal-content">
+
+        <div class="modal-header">
+
+            <div>
+                <h2 id="doctor-form-title">Thêm bác sĩ mới</h2>
+                <p>Nhập đầy đủ thông tin bác sĩ</p>
+            </div>
+
+            <button
+                type="button"
+                class="doctor-modal-close"
+                id="close-doctor-form"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <form id="doctor-form">
+
+            <input
+                type="hidden"
+                id="doctor-form-mode"
+                value="create"
+            >
+
+            <div class="doctor-form-grid">
+
+                <!-- MÃ BÁC SĨ -->
+                <div class="form-group">
+
+                    <label for="ma_bac_si">
+                        Mã bác sĩ <span>*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="ma_bac_si"
+                        name="ma_bac_si"
+                        class="form-control"
+                        placeholder="Ví dụ: BS001"
+                        maxlength="20"
+                        required
+                    >
+
+                </div>
+
+                <!-- HỌ TÊN -->
+                <div class="form-group">
+
+                    <label for="ho_va_ten">
+                        Họ và tên <span>*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="ho_va_ten"
+                        name="ho_va_ten"
+                        class="form-control"
+                        placeholder="Nhập họ và tên"
+                        maxlength="100"
+                        required
+                    >
+
+                </div>
+
+                <!-- EMAIL -->
+                <div class="form-group">
+
+                    <label for="thu_dien_tu">
+                        Email <span>*</span>
+                    </label>
+
+                    <input
+                        type="email"
+                        id="thu_dien_tu"
+                        name="thu_dien_tu"
+                        class="form-control"
+                        placeholder="doctor@example.com"
+                        maxlength="100"
+                        required
+                    >
+
+                </div>
+
+                <!-- SỐ ĐIỆN THOẠI -->
+                <div class="form-group">
+
+                    <label for="so_dien_thoai">
+                        Số điện thoại <span>*</span>
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="so_dien_thoai"
+                        name="so_dien_thoai"
+                        class="form-control"
+                        placeholder="Nhập số điện thoại"
+                        maxlength="15"
+                        required
+                    >
+
+                </div>
+
+                <!-- LOẠI BÁC SĨ -->
+                <div class="form-group">
+
+                    <label for="loai_bac_si">
+                        Loại bác sĩ <span>*</span>
+                    </label>
+
+                    <select
+                        id="loai_bac_si"
+                        name="loai_bac_si"
+                        class="form-control"
+                        required
+                    >
+                        <option value="">Chọn loại bác sĩ</option>
+                        <option value="GP">Bác sĩ đa khoa</option>
+                        <option value="Specialist">Bác sĩ chuyên khoa</option>
+                    </select>
+
+                </div>
+
+                <!-- CHUYÊN KHOA -->
+                <div
+                    class="form-group doctor-specialist-field"
+                    id="specialty-group"
+                    hidden
+                >
+
+                    <label for="ma_chuyen_khoa">
+                        Chuyên khoa <span>*</span>
+                    </label>
+
+                    <select
+                        id="ma_chuyen_khoa"
+                        name="ma_chuyen_khoa"
+                        class="form-control"
+                    >
+                        <option value="">Chọn chuyên khoa</option>
+                    </select>
+
+                </div>
+
+                <!-- SỐ CHỨNG NHẬN -->
+                <div
+                    class="form-group doctor-specialist-field"
+                    id="certificate-group"
+                    hidden
+                >
+
+                    <label for="so_chung_nhan">
+                        Số chứng nhận <span>*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="so_chung_nhan"
+                        name="so_chung_nhan"
+                        class="form-control"
+                        placeholder="Nhập số chứng nhận"
+                        maxlength="50"
+                    >
+
+                </div>
+
+                <!-- PHÍ KHÁM -->
+                <div
+                    class="form-group doctor-specialist-field"
+                    id="fee-group"
+                    hidden
+                >
+
+                    <label for="phi_kham">
+                        Phí khám (VNĐ) <span>*</span>
+                    </label>
+
+                    <input
+                        type="number"
+                        id="phi_kham"
+                        name="phi_kham"
+                        class="form-control"
+                        placeholder="Nhập phí khám"
+                        min="0"
+                        step="0.01"
+                    >
+
+                </div>
+
+                <!-- SỐ PHÒNG KHÁM -->
+                <div
+                    class="form-group doctor-general-field"
+                    id="room-group"
+                    hidden
+                >
+
+                    <label for="so_phong_kham">
+                        Số phòng khám
+                    </label>
+
+                    <input
+                        type="text"
+                        id="so_phong_kham"
+                        name="so_phong_kham"
+                        class="form-control"
+                        placeholder="Ví dụ: P101"
+                        maxlength="20"
+                    >
+
+                </div>
+
+                <!-- CẤP ĐỘ CHĂM SÓC -->
+                <div
+                    class="form-group doctor-general-field"
+                    id="care-group"
+                    hidden
+                >
+
+                    <label for="cap_do_cham_soc">
+                        Cấp độ chăm sóc
+                    </label>
+
+                    <input
+                        type="text"
+                        id="cap_do_cham_soc"
+                        name="cap_do_cham_soc"
+                        class="form-control"
+                        placeholder="Nhập cấp độ chăm sóc"
+                        maxlength="50"
+                    >
+
+                </div>
+
+            </div>
+
+            <div class="doctor-form-note">
+                <span>*</span> Thông tin bắt buộc
+            </div>
+
+            <div class="doctor-form-actions">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    id="cancel-doctor-form"
+                >
+                    Hủy
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="save-doctor"
+                >
+                    Lưu thông tin
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL CHI TIẾT BÁC SĨ
+===================================================== -->
+
+<div class="modal" id="doctor-modal">
+
+    <div class="modal-content doctor-detail-modal-content">
+
+        <div class="modal-header">
+
+            <div>
+                <h2>Thông tin bác sĩ</h2>
+                <p>Chi tiết hồ sơ bác sĩ</p>
+            </div>
+
+            <button
+                type="button"
+                class="doctor-modal-close"
+                id="close-doctor-modal"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div id="doctor-detail">
+            <div class="loading">Đang tải dữ liệu...</div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL XÁC NHẬN XÓA
+===================================================== -->
+
+<div class="modal" id="delete-doctor-modal">
+
+    <div class="modal-content doctor-delete-modal-content">
+
+        <div class="doctor-delete-icon">
+            !
+        </div>
+
+        <h2>Xác nhận xóa bác sĩ</h2>
+
+        <p>
+            Bạn có chắc chắn muốn xóa bác sĩ
+            <strong id="delete-doctor-name"></strong>?
+        </p>
+
+        <p class="doctor-delete-warning">
+            Thao tác này có thể bị từ chối nếu bác sĩ đang được
+            sử dụng trong các hồ sơ hoặc lịch hẹn liên quan.
+        </p>
+
+        <div class="doctor-form-actions">
+
+            <button
+                type="button"
+                class="btn btn-secondary"
+                id="cancel-delete-doctor"
+            >
+                Hủy
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-danger"
+                id="confirm-delete-doctor"
+            >
+                Xác nhận xóa
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- JAVASCRIPT -->
+<script src="../js/api.js"></script>
+<script src="/js/auth.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/doctors.js"></script>
+
+</body>
+</html>

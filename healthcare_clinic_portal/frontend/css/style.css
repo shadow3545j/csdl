@@ -1,0 +1,970 @@
+
+/* ==========================================
+   1. GLOBAL
+========================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #087f9e;
+    --primary-dark: #056781;
+    --primary-light: #e5f5fa;
+
+    --sidebar-bg: #063b55;
+    --sidebar-hover: #105675;
+
+    --background: #edf4f9;
+    --white: #ffffff;
+
+    --text: #18334a;
+    --muted: #71869a;
+    --border: #dce7ef;
+
+    --success: #16a783;
+    --danger: #e34b4b;
+    --warning: #e99a32;
+    --info: #2997c5;
+
+    --shadow: 0 4px 18px rgba(21, 61, 88, 0.07);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--background);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.hidden {
+    display: none !important;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+
+/* ==========================================
+   2. MAIN LAYOUT
+========================================== */
+
+.app-layout {
+    min-height: 100vh;
+    display: flex;
+}
+
+#sidebar-container {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: 245px;
+    height: 100vh;
+    z-index: 100;
+}
+
+.main-content {
+    margin-left: 245px;
+    width: calc(100% - 245px);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#navbar-container {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.page-content {
+    padding: 28px;
+    flex: 1;
+    min-width: 0;
+}
+
+#footer-container {
+    margin-top: auto;
+}
+
+
+/* ==========================================
+   3. SIDEBAR
+========================================== */
+
+.sidebar {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 22px 13px 16px;
+    color: white;
+    background: var(--sidebar-bg);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,.2);
+    border-radius: 10px;
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 5px 8px 25px;
+    border-bottom: 1px solid rgba(255,255,255,.15);
+    flex-shrink: 0;
+}
+
+.brand-icon {
+    width: 43px;
+    height: 43px;
+    border-radius: 12px;
+    background: #087fbd;
+    display: grid;
+    place-items: center;
+    font-size: 25px;
+    flex-shrink: 0;
+}
+
+.brand-info h2 {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.brand-info span {
+    color: #b6d1e0;
+    font-size: 11px;
+}
+
+.sidebar-section {
+    margin-top: 25px;
+    flex-shrink: 0;
+}
+
+.sidebar-heading {
+    padding: 0 11px;
+    margin-bottom: 11px;
+    color: #a5c6d8;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.sidebar-link {
+    min-height: 45px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    margin-bottom: 5px;
+    border-radius: 9px;
+    color: #d4e4ed;
+    font-size: 13px;
+    transition: background .2s ease, color .2s ease;
+}
+
+.sidebar-link:hover {
+    background: rgba(255,255,255,.09);
+    color: white;
+}
+
+.sidebar-link.active {
+    background: var(--sidebar-hover);
+    color: white;
+    border-left: 3px solid #36c2df;
+    padding-left: 9px;
+    box-shadow: 0 3px 10px rgba(0,0,0,.08);
+}
+
+.menu-icon {
+    width: 24px;
+    min-width: 24px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 18px;
+}
+
+/* KHU VỰC TÀI KHOẢN SIDEBAR */
+
+.sidebar-bottom {
+    margin-top: auto;
+    padding: 18px 0 0;
+    border-top: 1px solid rgba(255,255,255,.15);
+    flex-shrink: 0;
+}
+
+.sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+    padding: 0 4px;
+}
+
+.user-avatar,
+.profile-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #dcecff;
+    color: #1269ae;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.user-info {
+    min-width: 0;
+    overflow: hidden;
+}
+
+.user-info strong,
+.profile-info strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.user-info strong {
+    color: #ffffff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.user-info span,
+.profile-info span {
+    display: block;
+    color: #a9c4d6;
+    font-size: 11px;
+}
+
+/* NÚT ĐĂNG XUẤT RIÊNG TRONG SIDEBAR */
+
+.sidebar-bottom .navbar-logout {
+    width: 100%;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    margin-top: 15px;
+    padding: 10px 14px;
+
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 9px;
+
+    background: rgba(255,255,255,.08);
+    color: #ffd4d4;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    transition: all .2s ease;
+}
+
+.sidebar-bottom .navbar-logout:hover {
+    background: rgba(220, 75, 75, .2);
+    border-color: rgba(255,150,150,.45);
+    color: #ffffff;
+}
+
+.sidebar-bottom .navbar-logout:active {
+    transform: scale(.98);
+}
+
+.sidebar-bottom .navbar-logout span:first-child {
+    font-size: 17px;
+}
+
+
+/* ==========================================
+   4. NAVBAR
+========================================== */
+
+.navbar {
+    min-height: 80px;
+    padding: 14px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    background: white;
+    border-bottom: 1px solid var(--border);
+}
+
+.navbar-title h1 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.navbar-title p {
+    margin-top: 3px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+}
+
+.navbar-date {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.navbar-divider {
+    width: 1px;
+    height: 35px;
+    background: var(--border);
+}
+
+.navbar-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e5f3f7;
+    color: #087f9e;
+    font-size: 15px;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.profile-info strong {
+    color: #18334a;
+    font-size: 13px;
+}
+
+.profile-info span {
+    color: #71869a;
+    font-size: 11px;
+}
+
+/* NÚT ĐĂNG XUẤT NAVBAR */
+
+.navbar-logout {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 9px 13px;
+    border: 1px solid #f0d5d5;
+    border-radius: 7px;
+    background: #fff;
+    color: #c03939;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s ease;
+    white-space: nowrap;
+}
+
+.navbar-logout:hover {
+    background: #fff1f1;
+    border-color: #e7aaaa;
+}
+
+.navbar-logout:active {
+    transform: scale(.97);
+}
+
+
+/* ==========================================
+   5. PAGE HEADING
+========================================== */
+
+.page-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 23px;
+}
+
+.page-heading h1 {
+    font-size: 23px;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.page-heading p {
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+
+/* ==========================================
+   6. CARD
+========================================== */
+
+.card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    padding: 21px;
+    box-shadow: var(--shadow);
+    min-width: 0;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.card-header h2,
+.card-header h3 {
+    font-size: 16px;
+}
+
+
+/* ==========================================
+   7. BUTTONS
+========================================== */
+
+.btn {
+    min-height: 37px;
+    padding: 8px 15px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 600;
+    transition: .2s;
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+.btn-secondary {
+    background: white;
+    color: #536b7f;
+    border-color: var(--border);
+}
+
+.btn-secondary:hover {
+    background: #f0f6fa;
+}
+
+.btn-danger {
+    background: #fff0f0;
+    color: var(--danger);
+    border-color: #ffdddd;
+}
+
+.btn-danger:hover {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-success {
+    background: var(--success);
+    color: white;
+}
+
+.btn-sm {
+    min-height: 29px;
+    padding: 5px 10px;
+    font-size: 11px;
+}
+
+
+/* ==========================================
+   8. FORM
+========================================== */
+
+.form-group {
+    margin-bottom: 17px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+    color: #40596e;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.form-control {
+    width: 100%;
+    min-height: 39px;
+    padding: 9px 12px;
+    color: var(--text);
+    background: white;
+    border: 1px solid #d5e1ea;
+    border-radius: 7px;
+    outline: none;
+    transition: .2s;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(8,127,158,.10);
+}
+
+.form-control::placeholder {
+    color: #a2b1bf;
+}
+
+textarea.form-control {
+    resize: vertical;
+}
+
+.search-box {
+    max-width: 330px;
+}
+
+
+/* ==========================================
+   9. GRID
+========================================== */
+
+.grid {
+    display: grid;
+    gap: 15px;
+}
+
+.grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+
+/* ==========================================
+   10. TABLE
+========================================== */
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    white-space: nowrap;
+}
+
+thead {
+    background: #f0f6fa;
+}
+
+th {
+    padding: 13px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    color: #526b80;
+    border-bottom: 1px solid var(--border);
+}
+
+td {
+    padding: 13px 14px;
+    font-size: 12px;
+    color: #3d566a;
+    border-bottom: 1px solid #edf2f6;
+}
+
+tbody tr:hover {
+    background: #f7fbfd;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.empty-state {
+    padding: 30px !important;
+    text-align: center;
+    color: #91a3b3;
+}
+
+
+/* ==========================================
+   11. STATUS BADGES
+========================================== */
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.status-scheduled {
+    background: #e3f1ff;
+    color: #2676bd;
+}
+
+.status-processing {
+    background: #eee8ff;
+    color: #7753bd;
+}
+
+.status-success {
+    background: #dcf8ed;
+    color: #138b68;
+}
+
+.status-danger {
+    background: #ffe7e7;
+    color: #cf4444;
+}
+
+.status-warning {
+    background: #fff2d9;
+    color: #bd791a;
+}
+
+.status-info {
+    background: #dff5fa;
+    color: #16829d;
+}
+
+.status-default {
+    background: #edf0f3;
+    color: #657687;
+}
+
+
+/* ==========================================
+   12. MODAL
+========================================== */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(10, 32, 48, .55);
+    backdrop-filter: blur(3px);
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: white;
+    border-radius: 13px;
+    padding: 25px;
+    box-shadow: 0 15px 55px rgba(0,0,0,.20);
+    animation: modalShow .2s ease;
+}
+
+@keyframes modalShow {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 22px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border);
+}
+
+.modal-header h2 {
+    font-size: 19px;
+    color: var(--text);
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 17px;
+    border-top: 1px solid var(--border);
+}
+
+
+/* ==========================================
+   13. MESSAGE
+========================================== */
+
+#message-container {
+    position: fixed;
+    top: 95px;
+    right: 25px;
+    z-index: 2000;
+}
+
+.message {
+    min-width: 260px;
+    max-width: 400px;
+    padding: 13px 17px;
+    margin-bottom: 10px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    animation: modalShow .2s ease;
+}
+
+.message-success {
+    border-left: 4px solid var(--success);
+}
+
+.message-error {
+    border-left: 4px solid var(--danger);
+}
+
+.message-warning {
+    border-left: 4px solid var(--warning);
+}
+
+.message-hide {
+    opacity: 0;
+    transform: translateX(20px);
+    transition: .3s;
+}
+
+.component-error {
+    padding: 15px;
+    color: var(--danger);
+}
+
+
+/* ==========================================
+   14. FOOTER
+========================================== */
+
+.footer {
+    min-height: 55px;
+    padding: 14px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    background: white;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.footer-right {
+    display: flex;
+    gap: 15px;
+}
+
+.footer-version {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+
+/* ==========================================
+   15. RESPONSIVE
+========================================== */
+
+@media (max-width: 1000px) {
+
+    #sidebar-container {
+        width: 210px;
+    }
+
+    .main-content {
+        margin-left: 210px;
+        width: calc(100% - 210px);
+    }
+
+    .page-content {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    #sidebar-container {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
+
+    .app-layout {
+        display: block;
+    }
+
+    .sidebar {
+        height: auto;
+        padding: 12px;
+    }
+
+    .sidebar-brand {
+        padding-bottom: 12px;
+    }
+
+    .sidebar-section {
+        margin-top: 12px;
+    }
+
+    .sidebar-bottom {
+        display: none;
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .navbar {
+        padding: 12px 16px;
+    }
+
+    .navbar-date,
+    .navbar-divider {
+        display: none;
+    }
+
+    .page-content {
+        padding: 16px;
+    }
+
+    .page-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .footer {
+        padding: 13px 16px;
+    }
+
+    .footer-right {
+        display: none;
+    }
+}
+
+@media (max-width: 576px) {
+
+    .navbar-title h1 {
+        font-size: 16px;
+    }
+
+    .navbar-title p {
+        font-size: 10px;
+    }
+
+    .navbar-profile {
+        display: none;
+    }
+
+    .grid-2,
+    .grid-3 {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        padding: 14px;
+    }
+
+    .modal-content {
+        padding: 17px;
+    }
+
+    .search-box {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .navbar-logout {
+        padding: 9px;
+    }
+
+    .navbar-logout span:last-child {
+        display: none;
+    }
+
+    .profile-info {
+        display: none;
+    }
+}
