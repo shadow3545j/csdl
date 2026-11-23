@@ -22,8 +22,8 @@ def validate_patient(data):
         if value is None or str(value).strip() == "":
             return False, f"Trường {field} không được để trống"
 
-    if data["gioi_tinh"] not in ["Nam", "Nữ"]:
-        return False, "Giới tính phải là Nam, Nữ "
+    if data["gioi_tinh"] not in ["Nam", "Nữ", "Khác"]:
+        return False, "Giới tính phải là Nam, Nữ hoặc Khác"
 
     try:
         birth_date = date.fromisoformat(str(data["ngay_sinh"]))
