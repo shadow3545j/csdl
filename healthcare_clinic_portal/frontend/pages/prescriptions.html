@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,102 +11,258 @@
 </head>
 
 <body>
-<div class="app-layout">
+    <div class="app-layout">
 
-    <div id="sidebar-container"></div>
+        <div id="sidebar-container"></div>
 
-    <main class="main-content">
-        <div id="navbar-container"></div>
+        <main class="main-content">
+            <div id="navbar-container"></div>
 
-        <section class="page-content">
+            <section class="page-content">
 
-            <div class="page-heading">
-                <div>
-                    <h1>Quản lý đơn thuốc</h1>
-                    <p>Tra cứu đơn thuốc và theo dõi quá trình cấp phát.</p>
-                </div>
-            </div>
+                <div class="page-heading">
+    <div>
+        <h1>Quản lý đơn thuốc</h1>
+        <p>Tra cứu đơn thuốc và theo dõi quá trình cấp phát.</p>
+    </div>
 
-            <div id="message" class="hidden"></div>
-
-            <div class="card">
-
-                <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px;">
-
-                    <input
-                        type="text"
-                        id="search-prescription"
-                        class="form-control search-box"
-                        placeholder="Tìm mã đơn thuốc hoặc bệnh nhân..."
-                    >
-
-                    <select
-                        id="filter-prescription-status"
-                        class="form-control"
-                        style="max-width:200px;"
-                    >
-                        <option value="">Tất cả trạng thái</option>
-                        <option value="Active">Active</option>
-                        <option value="Dispensed">Dispensed</option>
-                        <option value="Cancelled">Cancelled</option>
-                    </select>
-
-                    <button class="btn btn-secondary" id="refresh-prescriptions">
-                        ↻ Làm mới
-                    </button>
-
-                </div>
-
-                <div class="table-wrapper">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Mã đơn thuốc</th>
-                                <th>Mã hồ sơ</th>
-                                <th>Bệnh nhân</th>
-                                <th>Ngày kê</th>
-                                <th>Trạng thái</th>
-                                <th>Thao tác</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="prescriptions-table">
-                            <tr>
-                                <td colspan="6" class="empty-state">
-                                    Đang tải dữ liệu...
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-        </section>
-
-        <div id="footer-container"></div>
-    </main>
+    <button
+        type="button"
+        class="btn btn-primary"
+        id="open-create-prescription"
+        style="display:none;"
+    >
+        + Kê đơn thuốc
+    </button>
 </div>
 
-<div class="modal" id="prescription-modal">
-    <div class="modal-content">
+                <div id="message" class="hidden"></div>
+
+                <div class="card">
+                    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:20px;">
+
+                        <input type="text" id="search-prescription" class="form-control search-box"
+                            placeholder="Tìm mã đơn thuốc hoặc bệnh nhân...">
+
+                        <select id="filter-prescription-status" class="form-control" style="max-width:200px;">
+                            <option value="">Tất cả trạng thái</option>
+                            <option value="Active">Đang hiệu lực</option>
+                            <option value="Dispensed">Đã cấp phát</option>
+                            <option value="Cancelled">Đã hủy</option>
+                        </select>
+
+                        <input type="date" id="filter-prescription-date" class="form-control" style="max-width:180px;"
+                            title="Lọc theo ngày kê">
+
+                        <select id="filter-prescription-doctor" class="form-control" style="max-width:220px;">
+                            <option value="">Tất cả bác sĩ</option>
+                        </select>
+
+                        <button type="button" class="btn btn-secondary" id="clear-prescription-filters">
+                            Xóa bộ lọc
+                        </button>
+
+                        <button class="btn btn-secondary" id="refresh-prescriptions">
+                            ↻ Làm mới
+                        </button>
+
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Mã đơn thuốc</th>
+                                    <th>Mã hồ sơ</th>
+                                    <th>Bệnh nhân</th>
+                                    <th>Ngày kê</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="prescriptions-table">
+                                <tr>
+                                    <td colspan="6" class="empty-state">
+                                        Đang tải dữ liệu...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </section>
+
+            <div id="footer-container"></div>
+        </main>
+    </div>
+
+    <div class="modal" id="prescription-modal">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2>Chi tiết đơn thuốc</h2>
+                <button class="btn btn-secondary" id="close-prescription-modal">
+                    Đóng
+                </button>
+            </div>
+
+            <div id="prescription-detail">
+                <div class="loading">Đang tải dữ liệu...</div>
+            </div>
+
+        </div>
+    </div>
+<!-- ======================================
+     MODAL KÊ ĐƠN THUỐC
+====================================== -->
+
+<div class="modal" id="create-prescription-modal">
+    <div class="modal-content" style="max-width:900px;">
 
         <div class="modal-header">
-            <h2>Chi tiết đơn thuốc</h2>
-            <button class="btn btn-secondary" id="close-prescription-modal">
+            <h2>Kê đơn thuốc mới</h2>
+
+            <button
+                type="button"
+                class="btn btn-secondary"
+                id="close-create-prescription"
+            >
                 Đóng
             </button>
         </div>
 
-        <div id="prescription-detail">
-            <div class="loading">Đang tải dữ liệu...</div>
+        <div id="create-prescription-message"></div>
+
+        <div class="form-group" style="margin:16px 0;">
+            <label for="prescription-record">
+                Hồ sơ bệnh án
+            </label>
+
+            <select
+                id="prescription-record"
+                class="form-control"
+            >
+                <option value="">-- Chọn hồ sơ bệnh án --</option>
+            </select>
+        </div>
+
+        <div style="
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+            align-items:end;
+            margin:16px 0;
+        ">
+
+            <div style="flex:2;min-width:220px;">
+                <label for="prescription-medicine">
+                    Thuốc
+                </label>
+
+                <select
+                    id="prescription-medicine"
+                    class="form-control"
+                >
+                    <option value="">-- Chọn thuốc --</option>
+                </select>
+            </div>
+
+            <div style="flex:1;min-width:110px;">
+                <label for="prescription-quantity">
+                    Số lượng
+                </label>
+
+                <input
+                    id="prescription-quantity"
+                    class="form-control"
+                    type="number"
+                    min="1"
+                    step="1"
+                    value="1"
+                >
+            </div>
+
+            <div style="flex:2;min-width:180px;">
+                <label for="prescription-dose">
+                    Liều dùng
+                </label>
+
+                <input
+                    id="prescription-dose"
+                    class="form-control"
+                    maxlength="100"
+                    placeholder="Nhập liều dùng"
+                >
+            </div>
+
+            <div style="flex:1;min-width:140px;">
+                <label for="prescription-route">
+                    Đường dùng
+                </label>
+
+                <input
+                    id="prescription-route"
+                    class="form-control"
+                    maxlength="50"
+                    placeholder="Ví dụ: Uống"
+                >
+            </div>
+
+            <button
+                type="button"
+                class="btn btn-secondary"
+                id="add-prescription-medicine"
+            >
+                Thêm thuốc
+            </button>
+
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Thuốc</th>
+                        <th>Tồn kho</th>
+                        <th>Số lượng</th>
+                        <th>Liều dùng</th>
+                        <th>Đường dùng</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+
+                <tbody id="new-prescription-items">
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            Chưa có thuốc
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="
+            display:flex;
+            justify-content:flex-end;
+            margin-top:18px;
+        ">
+            <button
+                type="button"
+                class="btn btn-primary"
+                id="save-prescription"
+            >
+                Lưu đơn thuốc
+            </button>
         </div>
 
     </div>
 </div>
-
-<script src="../js/api.js"></script>
-<script src="/js/auth.js"></script>
-<script src="../js/utils.js"></script>
-<script src="../js/prescriptions.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/prescriptions.js"></script>
 </body>
+
 </html>

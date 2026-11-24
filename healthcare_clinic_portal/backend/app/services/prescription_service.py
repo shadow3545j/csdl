@@ -46,3 +46,29 @@ def process_dispense_prescription(prescription_id):
     updated_prescription = get_prescription_by_id(prescription_id)
 
     return True, updated_prescription
+# ==========================================
+# KÊ ĐƠN THUỐC
+# ==========================================
+
+def fetch_prescription_form_options(doctor_id):
+    from app.models.prescription_model import (
+        get_prescription_form_options
+    )
+
+    return get_prescription_form_options(doctor_id)
+
+
+def process_create_prescription(data, doctor_id):
+    from app.models.prescription_model import (
+        create_prescription
+    )
+
+    prescription_id = create_prescription(
+        data,
+        doctor_id
+    )
+
+    return get_prescription_by_id(
+        prescription_id,
+        doctor_id=doctor_id
+    )

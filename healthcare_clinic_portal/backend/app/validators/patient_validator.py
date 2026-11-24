@@ -12,6 +12,42 @@ REQUIRED_FIELDS = [
 ]
 
 
+def validate_allergies(allergies):
+    """
+    Kiểm tra danh sách dị ứng gửi từ giao diện.
+    Mỗi dị ứng gồm:
+    - ten_di_nguyen
+    - muc_do
+    """
+
+    if allergies is None:
+        return True, None
+
+    if not isinstance(allergies, list):
+        return False, "Danh sách dị ứng không hợp lệ"
+
+    for index, allergy in enumerate(allergies, start=1):
+
+        if not isinstance(allergy, dict):
+            return False, f"Dị ứng thứ {index} không hợp lệ"
+
+        allergen = str(
+            allergy.get("ten_di_nguyen") or ""
+        ).strip()
+
+        severity = str(
+            allergy.get("muc_do") or ""
+        ).strip()
+
+        if not allergen:
+            return False, f"Vui lòng nhập tên chất dị ứng thứ {index}"
+
+        if not severity:
+            return False, f"Vui lòng chọn mức độ dị ứng thứ {index}"
+
+    return True, None
+
+
 def validate_patient(data):
     if not isinstance(data, dict):
         return False, "Dữ liệu gửi lên không hợp lệ"
@@ -44,5 +80,13 @@ def validate_patient(data):
 
     if len(str(data["can_cuoc_cong_dan"])) > 20:
         return False, "CCCD tối đa 20 ký tự"
+
+    # Kiểm tra danh sách dị ứng nếu có gửi lên
+    valid, message = validate_allergies(
+        data.get("di_ung")
+    )
+
+    if not valid:
+        return False, message
 
     return True, None

@@ -81,7 +81,30 @@ function initializeMedicineEvents() {
     document
         .getElementById("search-medicine")
         ?.addEventListener("input", handleMedicineSearch);
+    document
+    .getElementById("filter-medicine-stock")
+    ?.addEventListener("change", handleMedicineSearch);
 
+document
+    .getElementById("clear-medicine-filters")
+    ?.addEventListener("click", () => {
+
+        const searchInput = document.getElementById("search-medicine");
+        const stockFilter = document.getElementById("filter-medicine-stock");
+
+        if (searchInput) {
+            searchInput.value = "";
+        }
+
+        if (stockFilter) {
+            stockFilter.value = "";
+        }
+
+        handleMedicineSearch({
+            target: searchInput || { value: "" }
+        });
+
+    });
     document
         .getElementById("refresh-medicines")
         ?.addEventListener("click", loadMedicines);
@@ -490,9 +513,13 @@ function updateMedicineResultCount() {
 
 function handleMedicineSearch(event) {
 
-    const keyword = String(event.target.value || "")
-        .trim()
-        .toLowerCase();
+    const keyword = String(
+        document.getElementById("search-medicine")?.value || ""
+    ).trim().toLowerCase();
+
+    const stockStatus = String(
+        document.getElementById("filter-medicine-stock")?.value || ""
+    );
 
     filteredMedicines = medicines.filter(medicine => {
 
@@ -508,11 +535,23 @@ function handleMedicineSearch(event) {
             medicine.hoat_chat || ""
         ).toLowerCase();
 
-        return (
+        // Tìm kiếm thuốc
+        const matchesSearch =
             medicineId.includes(keyword) ||
             medicineName.includes(keyword) ||
-            activeIngredient.includes(keyword)
-        );
+            activeIngredient.includes(keyword);
+
+        // Xác định tình trạng tồn kho
+        const quantity = Number(medicine.so_luong_ton);
+
+        const status = getMedicineStockStatus(quantity);
+
+        // Lọc theo tình trạng tồn kho
+        const matchesStock =
+            !stockStatus ||
+            status.className === stockStatus;
+
+        return matchesSearch && matchesStock;
 
     });
 

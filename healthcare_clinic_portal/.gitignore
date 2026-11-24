@@ -16,3 +16,8 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+# Môi trường ảo Python
+.venv/
+venv/
+__pycache__/
+*.pyc
