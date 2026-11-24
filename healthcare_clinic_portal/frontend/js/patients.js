@@ -130,7 +130,207 @@ function bindPatientEvents() {
 
     });
 
+    document
+        .getElementById("add-allergy-row")
+        ?.addEventListener("click", () => {
+            addAllergyRow();
+        });
+
+    document
+        .getElementById("patient-allergies-list")
+        ?.addEventListener("click", event => {
+            const button = event.target.closest(
+                "[data-remove-allergy]"
+            );
+
+            if (button) {
+                button.closest(".patient-allergy-row")?.remove();
+                updateAllergyRowNumbers();
+            }
+        });
+
+
 }
+
+// ==========================================
+// QUẢN LÝ DÒNG DỊ ỨNG
+// ==========================================
+
+function addAllergyRow(allergy = {}) {
+
+    const container = document.getElementById(
+        "patient-allergies-list"
+    );
+
+    if (!container) return;
+
+    const row = document.createElement("div");
+
+    row.className = "patient-allergy-row";
+
+    const allergen = document.createElement("input");
+    allergen.type = "text";
+    allergen.className = "form-control allergy-name";
+    allergen.placeholder = "Ví dụ: Penicillin";
+    allergen.maxLength = 255;
+    allergen.value = allergy.ten_di_nguyen || "";
+
+    const severity = document.createElement("select");
+    severity.className = "form-control allergy-severity";
+
+    const options = [
+        ["", "Chọn mức độ"],
+        ["Nhẹ", "Nhẹ"],
+        ["Trung bình", "Trung bình"],
+        ["Nguy kịch", "Nguy kịch"]
+    ];
+
+    options.forEach(([value, label]) => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = label;
+        severity.appendChild(option);
+    });
+
+    severity.value = allergy.muc_do || "";
+
+    const heading = document.createElement("strong");
+    heading.className = "allergy-row-heading";
+
+    const nameGroup = document.createElement("div");
+    nameGroup.className = "form-group";
+
+    const nameLabel = document.createElement("label");
+    nameLabel.textContent = "Tên chất/thuốc dị ứng";
+
+    nameGroup.append(nameLabel, allergen);
+
+    const severityGroup = document.createElement("div");
+    severityGroup.className = "form-group";
+
+    const severityLabel = document.createElement("label");
+    severityLabel.textContent = "Mức độ dị ứng";
+
+    severityGroup.append(severityLabel, severity);
+
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.className = "btn btn-secondary allergy-remove-btn";
+    removeButton.dataset.removeAllergy = "true";
+    removeButton.textContent = "Xóa";
+
+    row.append(
+        heading,
+        nameGroup,
+        severityGroup,
+        removeButton
+    );
+
+    container.appendChild(row);
+
+    updateAllergyRowNumbers();
+}
+
+
+// ==========================================
+// CẬP NHẬT SỐ THỨ TỰ DỊ ỨNG
+// ==========================================
+
+function updateAllergyRowNumbers() {
+
+    const rows = document.querySelectorAll(
+        "#patient-allergies-list .patient-allergy-row"
+    );
+
+    rows.forEach((row, index) => {
+
+        const heading = row.querySelector(
+            ".allergy-row-heading"
+        );
+
+        if (heading) {
+            heading.textContent = `Dị ứng ${index + 1}`;
+        }
+
+    });
+
+}
+
+
+// ==========================================
+// XÓA TOÀN BỘ DÒNG DỊ ỨNG TRÊN FORM
+// ==========================================
+
+function clearAllergyRows() {
+
+    const container = document.getElementById(
+        "patient-allergies-list"
+    );
+
+    if (container) {
+        container.innerHTML = "";
+    }
+
+}
+
+
+// ==========================================
+// TẢI DỮ LIỆU DỊ ỨNG VÀO FORM
+// ==========================================
+
+function renderPatientAllergies(allergies = []) {
+
+    clearAllergyRows();
+
+    if (!Array.isArray(allergies)) {
+        return;
+    }
+
+    allergies.forEach(allergy => {
+        addAllergyRow(allergy);
+    });
+
+}
+
+
+// ==========================================
+// LẤY DANH SÁCH DỊ ỨNG TỪ FORM
+// ==========================================
+
+function collectPatientAllergies() {
+
+    const rows = document.querySelectorAll(
+        "#patient-allergies-list .patient-allergy-row"
+    );
+
+    const allergies = [];
+
+    rows.forEach(row => {
+
+        const allergen = row.querySelector(
+            ".allergy-name"
+        )?.value.trim() || "";
+
+        const severity = row.querySelector(
+            ".allergy-severity"
+        )?.value || "";
+
+        // Bỏ qua dòng hoàn toàn trống
+        if (!allergen && !severity) {
+            return;
+        }
+
+        allergies.push({
+            ten_di_nguyen: allergen,
+            muc_do: severity
+        });
+
+    });
+
+    return allergies;
+
+}
+
 // ==========================================
 // 5. HỒ SƠ CÁ NHÂN CỦA PATIENT
 // ==========================================
@@ -230,6 +430,39 @@ async function loadOwnPatientProfile(account) {
                 patient.tom_tat_tien_su || "Chưa cập nhật"
             ]
         ];
+     
+        const allergyHTML = Array.isArray(patient.di_ung)
+            && patient.di_ung.length > 0
+            ? patient.di_ung.map(allergy => `
+                <div style="
+                    padding: 12px 14px;
+                    border: 1px solid #fecaca;
+                    border-radius: 10px;
+                    margin-bottom: 10px;
+                    background: #fffafa;
+                ">
+                    <div style="
+                        font-weight: 600;
+                        margin-bottom: 5px;
+                    ">
+                        ${escapeHTML(allergy.ten_di_nguyen || "")}
+                    </div>
+
+                    <div style="
+                        font-size: 13px;
+                        color: #64748b;
+                    ">
+                        Mức độ:
+                        ${escapeHTML(allergy.muc_do || "Chưa xác định")}
+                    </div>
+                </div>
+            `).join("")
+            : `
+                <p style="color: #64748b;">
+                    Chưa ghi nhận dị ứng.
+                </p>
+            `;
+
 
         if (profileContent) {
 
@@ -258,6 +491,19 @@ async function loadOwnPatientProfile(account) {
                             </div>
                         </div>
                     `).join("")}
+
+                </div>
+
+                <div style="margin-top: 20px;">
+
+                    <h3 style="
+                        margin-bottom: 12px;
+                        font-size: 16px;
+                    ">
+                        ⚠ Thông tin dị ứng
+                    </h3>
+
+                    ${allergyHTML}
 
                 </div>
 
@@ -846,7 +1092,7 @@ function openCreatePatientModal() {
     if (!form) return;
 
     form.reset();
-
+renderPatientAllergies([]);
     const patientIdInput = document.getElementById("ma_benh_nhan");
 
     if (patientIdInput) {
@@ -963,7 +1209,9 @@ async function editPatient(patientId) {
         }
 
         form.reset();
-
+renderPatientAllergies(
+    patient.di_ung || []
+);
         form.elements.namedItem("ma_benh_nhan").value =
             patient.ma_benh_nhan || "";
 
@@ -1060,7 +1308,29 @@ async function savePatient(event) {
     const formData = new FormData(form);
 
     const data = Object.fromEntries(formData.entries());
+// Lấy danh sách dị ứng từ giao diện
+data.di_ung = collectPatientAllergies();
 
+// Kiểm tra các dòng dị ứng đã nhập
+for (const allergy of data.di_ung) {
+
+    if (!allergy.ten_di_nguyen) {
+        showMessage(
+            "Vui lòng nhập tên chất hoặc thuốc dị ứng.",
+            "error"
+        );
+        return;
+    }
+
+    if (!allergy.muc_do) {
+        showMessage(
+            "Vui lòng chọn mức độ dị ứng.",
+            "error"
+        );
+        return;
+    }
+
+}
     // Khi cập nhật, mã bệnh nhân lấy từ editingPatientId
     data.ma_benh_nhan = (
         editingPatientId || data.ma_benh_nhan || ""

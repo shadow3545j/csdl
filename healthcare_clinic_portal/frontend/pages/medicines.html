@@ -81,22 +81,43 @@
 
                     <div class="medicine-toolbar">
 
-                        <div class="medicine-search">
-                            <input
-                                type="text"
-                                id="search-medicine"
-                                class="form-control"
-                                placeholder="Tìm theo mã thuốc, tên biệt dược hoặc hoạt chất...">
-                        </div>
+    <div class="medicine-search">
+        <input
+            type="text"
+            id="search-medicine"
+            class="form-control"
+            placeholder="Tìm theo mã thuốc, tên biệt dược hoặc hoạt chất..."
+        >
+    </div>
 
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            id="refresh-medicines">
-                            Làm mới
-                        </button>
+    <select
+        id="filter-medicine-stock"
+        class="form-control"
+        style="max-width:200px;"
+    >
+        <option value="">Tất cả tình trạng kho</option>
+        <option value="available">Còn hàng</option>
+        <option value="low">Sắp hết hàng</option>
+        <option value="empty">Hết hàng</option>
+    </select>
 
-                    </div>
+    <button
+        type="button"
+        class="btn btn-secondary"
+        id="clear-medicine-filters"
+    >
+        Xóa bộ lọc
+    </button>
+
+    <button
+        type="button"
+        class="btn btn-secondary"
+        id="refresh-medicines"
+    >
+        Làm mới
+    </button>
+
+</div>
 
                     <div class="table-wrapper">
 

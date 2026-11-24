@@ -9,11 +9,14 @@ from app.services.patient_service import (
     remove_patient
 )
 
-from app.validators.patient_validator import validate_patient
+from app.validators.patient_validator import (
+    validate_patient,
+    validate_allergies
+)
+
 from app.utils.response import success_response, error_response
 
 from app.middleware.auth_middleware import (
-    login_required,
     roles_required,
     is_own_patient
 )
@@ -50,7 +53,6 @@ def get_patient(patient_id):
 
     current_role = session.get("vai_tro")
 
-    # Bệnh nhân chỉ được xem hồ sơ của chính mình
     if current_role == "Patient" and not is_own_patient(patient_id):
         return error_response(
             "Bạn không có quyền xem hồ sơ bệnh nhân này",
@@ -112,6 +114,17 @@ def update_patient_route(patient_id):
             "Dữ liệu cập nhật không hợp lệ",
             400
         )
+
+    # Chỉ kiểm tra dị ứng khi request có gửi trường di_ung.
+    # Không gửi trường này nghĩa là giữ nguyên danh sách dị ứng cũ.
+    if "di_ung" in data:
+
+        valid, message = validate_allergies(
+            data.get("di_ung")
+        )
+
+        if not valid:
+            return error_response(message, 400)
 
     patient = edit_patient(patient_id, data)
 
