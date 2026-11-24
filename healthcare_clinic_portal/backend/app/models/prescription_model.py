@@ -310,7 +310,7 @@ def create_prescription(data, doctor_id):
         # Kiểm tra hồ sơ thuộc bác sĩ đăng nhập.
         # Đồng thời khóa dòng hồ sơ trong transaction.
         cursor.execute("""
-            SELECT hs.ma_ho_so
+            SELECT hs.ma_ho_so, hs.ma_benh_nhan
             FROM ho_so_benh_an hs
             JOIN lich_hen_kham lh
                 ON lh.ma_lich_hen = hs.ma_lich_hen
@@ -324,11 +324,15 @@ def create_prescription(data, doctor_id):
             FOR UPDATE
         """, (record_id, doctor_id))
 
-        if cursor.fetchone() is None:
+        record_row = cursor.fetchone()
+
+        if record_row is None:
             raise ValueError(
                 "Hồ sơ không tồn tại, không thuộc bác sĩ "
                 "hoặc đã có đơn thuốc."
             )
+
+        patient_id = record_row["ma_benh_nhan"]
 
         normalized = []
         seen_medicines = set()
@@ -408,6 +412,36 @@ def create_prescription(data, doctor_id):
                 raise ValueError(
                     f"Không tìm thấy thuốc có mã {medicine_id}."
                 )
+
+        # Kiểm tra dị ứng: không được kê thuốc mà bệnh nhân đã khai báo
+        # dị ứng. So khớp tên dị nguyên với hoạt chất và tên biệt dược
+        # của thuốc (không phân biệt hoa thường, bỏ khoảng trắng thừa).
+        medicine_ids = [item[0] for item in normalized]
+
+        placeholders = ", ".join(["%s"] * len(medicine_ids))
+
+        cursor.execute(f"""
+            SELECT DISTINCT
+                dm.ten_biet_duoc,
+                du.ten_di_nguyen
+            FROM danh_muc_thuoc dm
+            JOIN di_ung_benh_nhan du
+                ON du.ma_benh_nhan = %s
+               AND (
+                    LOWER(TRIM(du.ten_di_nguyen)) = LOWER(TRIM(dm.hoat_chat))
+                 OR LOWER(TRIM(du.ten_di_nguyen)) = LOWER(TRIM(dm.ten_biet_duoc))
+               )
+            WHERE dm.ma_thuoc IN ({placeholders})
+        """, (patient_id, *medicine_ids))
+
+        allergy_conflict = cursor.fetchone()
+
+        if allergy_conflict is not None:
+            raise ValueError(
+                "Không thể kê đơn: bệnh nhân bị dị ứng với "
+                f"{allergy_conflict['ten_di_nguyen']} "
+                f"(thuốc {allergy_conflict['ten_biet_duoc']})."
+            )
 
         # Sinh mã đơn thuốc.
         prescription_id = _generate_next_code(
